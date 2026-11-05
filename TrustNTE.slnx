@@ -1,0 +1,14 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="TrustNTE.csproj">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="TrustNTE.Tests/TrustNTE.Tests.csproj" Id="1d4e069d-6c8d-4764-af51-c2b2c2ce7d11">
+    <Platform Project="x64" />
+  </Project>
+  <Project Path="TrustNTE.update/TrustNTE.update.csproj" Id="87fcf5ff-95ef-4530-b8f7-5d6ab475175c">
+    <Platform Project="x64" />
+  </Project>
+</Solution>

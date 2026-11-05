@@ -1,0 +1,15 @@
+{
+  "Version": "1.0.2",
+  "Items": [
+    {
+      "Title": "【国服】与【国际服】兑换码是通用的",
+      "Server": "CN",
+      "Codes": [ "EXENORESPONSE", "HIOLDFRIEND", "INVALIDNUMBER" ]
+    },
+    {
+      "Title": "【国服】与【国际服】兑换码是通用的",
+      "Server": "Global",
+      "Codes": [ "EXENORESPONSE", "HIOLDFRIEND", "INVALIDNUMBER" ]
+    }
+  ]
+}

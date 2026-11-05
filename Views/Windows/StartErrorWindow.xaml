@@ -1,0 +1,61 @@
+﻿<ui:FluentWindow x:Class="TrustNTE.Views.Windows.StartErrorWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="启动错误" Width="480" Height="380"
+                 WindowStartupLocation="CenterOwner"
+                 WindowBackdropType="Mica" ExtendsContentIntoTitleBar="True"
+                 Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <ui:TitleBar Grid.Row="0" Title="启动错误">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="/Assets/titlelogo.ico" Width="16" Height="16" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <!-- 内容区：改为居中排版 -->
+        <StackPanel Grid.Row="1" Margin="32,20,32,20" VerticalAlignment="Center" HorizontalAlignment="Center">
+
+            <!--        换成了更有威慑力的警告三角图标，颜色用了系统红 -->
+            <ui:SymbolIcon Symbol="Warning24" FontSize="64" 
+                           Foreground="{ui:ThemeResource SystemFillColorCriticalBrush}" 
+                           HorizontalAlignment="Center" Margin="0,0,0,16"/>
+
+            <!-- 主标题 -->
+            <TextBlock Text="截图引擎未启动" FontSize="22" FontWeight="Bold" 
+                       HorizontalAlignment="Center" Margin="0,0,0,16"
+                       Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+
+            <!-- 文案提示 -->
+            <TextBlock FontSize="14" TextWrapping="Wrap" LineHeight="24" HorizontalAlignment="Center" TextAlignment="Center"
+                       Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}">
+                <Run Text="1. 确保截图引擎启动" />
+                <LineBreak/>
+                <Run Text="2. 获取游戏路径并启用" />
+                <LineBreak/>
+                <Hyperlink Click="GotoCapture_Click" Foreground="{ui:ThemeResource AccentTextFillColorPrimaryBrush}" TextDecorations="None" FontWeight="SemiBold">
+                    <Run Text="→点击这里前往截图引擎配置←" />
+                </Hyperlink>
+            </TextBlock>
+        </StackPanel>
+
+        <!-- 底部操作栏 -->
+        <Border Grid.Row="2" Background="{ui:ThemeResource ControlFillColorDefaultBrush}" 
+                BorderThickness="0,1,0,0" BorderBrush="{ui:ThemeResource ControlElevationBorderBrush}" 
+                Padding="24,16" CornerRadius="0,0,8,8">
+            <ui:Button Appearance="Primary" Width="120" HorizontalAlignment="Right" Click="GotoCapture_Click">
+                <StackPanel Orientation="Horizontal">
+                    <ui:SymbolIcon Symbol="Checkmark24" Margin="0,0,8,0" />
+                    <TextBlock Text="朕已阅" />
+                </StackPanel>
+            </ui:Button>
+        </Border>
+    </Grid>
+</ui:FluentWindow>

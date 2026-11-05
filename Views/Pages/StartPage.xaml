@@ -1,0 +1,50 @@
+<UserControl x:Class="TrustNTE.Views.Pages.StartPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers"
+             xmlns:comp="clr-namespace:TrustNTE.Views.Pages.Components"
+             Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}">
+
+    <Grid Margin="42,16,0,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,42,0">
+
+
+                <!-- 1. 轮播图 -->
+                <comp:CarouselCardControl DataContext="{Binding}" />
+
+                <!-- 2. 截图器 -->
+                <comp:CaptureCardControl DataContext="{Binding}" />
+
+                <!-- 3. 启动器 -->
+                <comp:LauncherCardControl DataContext="{Binding}" />
+
+                <!-- 4. API 服务 -->
+                <comp:ApiCardControl DataContext="{Binding}" />
+
+                <!-- 5. 日志控制 -->
+                <comp:LogCardControl DataContext="{Binding}" />
+
+                <!-- 6. 按键与点击测试 -->
+                <comp:KeyTestCardControl DataContext="{Binding}" />
+
+                <!-- 7. 文字 OCR 测试 -->
+                <comp:OcrTestCardControl DataContext="{Binding}" />
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <ui:TextBlock Grid.Row="1"
+                      Text="{Binding StatusText}"
+                      FontTypography="Caption"
+                      Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                      HorizontalAlignment="Center"
+                      Margin="0,10,0,0" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,156 @@
+{
+    "Nte_InvalidRedemptionCode": {
+        "x": 0,
+        "y": 92,
+        "w": 155,
+        "h": 30,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedemptionCodeUsed": {
+        "x": 0,
+        "y": 0,
+        "w": 248,
+        "h": 34,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedeemSuccess2": {
+        "x": 0,
+        "y": 44,
+        "w": 127,
+        "h": 38,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedeemSuccess1": {
+        "x": 0,
+        "y": 132,
+        "w": 127,
+        "h": 31,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedemptionCodeConfirmation": {
+        "x": 72,
+        "y": 214,
+        "w": 55,
+        "h": 33,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedeemCodePage2": {
+        "x": 137,
+        "y": 44,
+        "w": 101,
+        "h": 33,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedeemCodePage1": {
+        "x": 0,
+        "y": 173,
+        "w": 97,
+        "h": 31,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PleaseEnterRedemptionCode1": {
+        "x": 137,
+        "y": 132,
+        "w": 74,
+        "h": 28,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PleaseEnterRedemptionCode2": {
+        "x": 210,
+        "y": 202,
+        "w": 52,
+        "h": 28,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_RedemptionCodeRedirect": {
+        "x": 165,
+        "y": 92,
+        "w": 81,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GoToRedemptionCode4": {
+        "x": 137,
+        "y": 170,
+        "w": 88,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GoToRedemptionCode3": {
+        "x": 137,
+        "y": 202,
+        "w": 63,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GoToRedemptionCode2": {
+        "x": 137,
+        "y": 236,
+        "w": 59,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GoToRedemptionCode1": {
+        "x": 0,
+        "y": 214,
+        "w": 62,
+        "h": 34,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    }
+}

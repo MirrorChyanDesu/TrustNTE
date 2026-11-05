@@ -1,0 +1,21 @@
+<UserControl x:Class="TrustNTE.Views.Pages.TaskModules.AutoPawView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:TrustNTE.Views.Controls"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+    <ui:CardExpander Margin="0,0,0,12" ContentPadding="0" IsExpanded="False">
+        <ui:CardExpander.Header>
+            <controls:TaskCardHeader Title="{helpers:Trans '自动粉爪'}" 
+                                     Description="{helpers:Trans '该功能目前尚未完善，敬请期待'}" 
+                                     IconImage="Assets/paw_icon.png">
+                <controls:TaskCardHeader.HeaderContent>
+                    <ui:ToggleSwitch IsChecked="{Binding Config.IsEnabled}" IsEnabled="False"/>
+                </controls:TaskCardHeader.HeaderContent>
+            </controls:TaskCardHeader>
+        </ui:CardExpander.Header>
+        <StackPanel Margin="16">
+            <ui:TextBlock Text="{helpers:Trans '该功能目前尚未完善，敬请期待！'}" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+        </StackPanel>
+    </ui:CardExpander>
+</UserControl>

@@ -1,0 +1,106 @@
+<UserControl x:Class="TrustNTE.Views.Pages.Components.ApiCardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+    <ui:CardExpander Margin="0,0,0,12" ContentPadding="0" IsExpanded="False">
+        <ui:CardExpander.Icon>
+            <ui:SymbolIcon Symbol="Server24" FontSize="20" />
+        </ui:CardExpander.Icon>
+        <ui:CardExpander.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <ui:TextBlock FontTypography="Body" Text="{helpers:Trans '本地 API 服务'}" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '允许外部脚本或 AI 通过 HTTP 请求控制本软件'}" />
+                </StackPanel>
+                <ui:ToggleSwitch Grid.Column="1" Margin="0,0,24,0" IsChecked="{Binding IsApiEnabled}" VerticalAlignment="Center" />
+            </Grid>
+        </ui:CardExpander.Header>
+        <StackPanel>
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <ui:TextBlock FontTypography="Body" Text="{helpers:Trans '开启后，外部程序可接入。无需求时建议关闭以节省资源。一键复制可以发给AI→'}" />
+                </StackPanel>
+                <ui:Button Grid.Column="1" Content="{Binding CopyDocsText}" Icon="{ui:SymbolIcon DocumentCopy24}" Command="{Binding CopyApiDocsCommand}" VerticalAlignment="Center" Margin="0,0,20,0" Width="120"/>
+            </Grid>
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <StackPanel Margin="16,8">
+                <!-- 1. 启动 API -->
+                <Grid Margin="0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock Grid.Column="0" FontTypography="Body" Text="{helpers:Trans '启动截图 API：'}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:TextBox Grid.Column="1" Text="http://localhost:8888/api/v1/start" IsReadOnly="True" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:Button Grid.Column="2" Content="{Binding CopyStartText}" Command="{Binding CopyApiCommand}" CommandParameter="http://localhost:8888/api/v1/start" VerticalAlignment="Center" Width="96"/>
+                </Grid>
+                <!-- 2. 停止 API -->
+                <Grid Margin="0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock Grid.Column="0" FontTypography="Body" Text="{helpers:Trans '停止截图 API：'}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:TextBox Grid.Column="1" Text="http://localhost:8888/api/v1/stop" IsReadOnly="True" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:Button Grid.Column="2" Content="{Binding CopyStopText}" Command="{Binding CopyApiCommand}" CommandParameter="http://localhost:8888/api/v1/stop" VerticalAlignment="Center" Width="96"/>
+                </Grid>
+                <!-- 3. 日志 API -->
+                <Grid Margin="0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock Grid.Column="0" FontTypography="Body" Text="{helpers:Trans '获取日志 API：'}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:TextBox Grid.Column="1" Text="http://localhost:8888/api/v1/logs" IsReadOnly="True" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:Button Grid.Column="2" Content="{Binding CopyLogText}" Command="{Binding CopyApiCommand}" CommandParameter="http://localhost:8888/api/v1/logs" VerticalAlignment="Center" Width="96"/>
+                </Grid>
+                <!-- 4. 画面图片 API -->
+                <Grid Margin="0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock Grid.Column="0" FontTypography="Body" Text="{helpers:Trans '画面 API (图片)：'}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:TextBox Grid.Column="1" Text="http://localhost:8888/api/v1/screenshot" IsReadOnly="True" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:Button Grid.Column="2" Content="{Binding CopyScreenText}" Command="{Binding CopyApiCommand}" CommandParameter="http://localhost:8888/api/v1/screenshot" VerticalAlignment="Center" Width="96"/>
+                </Grid>
+                <!-- 5. 画面 Base64 API -->
+                <Grid Margin="0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock Grid.Column="0" FontTypography="Body" Text="{helpers:Trans '画面 API (Base64)：'}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:TextBox Grid.Column="1" Text="http://localhost:8888/api/v1/screenshot_base64" IsReadOnly="True" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:Button Grid.Column="2" Content="{Binding CopyBase64Text}" Command="{Binding CopyApiCommand}" CommandParameter="http://localhost:8888/api/v1/screenshot_base64" VerticalAlignment="Center" Width="96"/>
+                </Grid>
+                <!--     6. 画面实时监控网页 API -->
+                <Grid Margin="0,4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock Grid.Column="0" FontTypography="Body" Text="{helpers:Trans '画面 API (监控)：'}" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:TextBox Grid.Column="1" Text="http://localhost:8888/api/v1/viewer" IsReadOnly="True" VerticalAlignment="Center" Margin="0,0,10,0" />
+                    <ui:Button Grid.Column="2" Content="{Binding CopyViewerText}" Command="{Binding CopyApiCommand}" CommandParameter="http://localhost:8888/api/v1/viewer" VerticalAlignment="Center" Width="96"/>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+    </ui:CardExpander>
+</UserControl>

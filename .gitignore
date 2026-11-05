@@ -1,0 +1,8 @@
+.vs/
+bin/
+obj/
+Logs/
+publish/
+Output/
+Data/
+*.user

@@ -1,0 +1,156 @@
+{
+    "Nte_EnterGame4": {
+        "x": 0,
+        "y": 70,
+        "w": 110,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_EnterGame3": {
+        "x": 0,
+        "y": 0,
+        "w": 112,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_EnterGame2": {
+        "x": 0,
+        "y": 105,
+        "w": 110,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DisconnectReconnect_Retry1": {
+        "x": 122,
+        "y": 0,
+        "w": 52,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DisconnectReconnect_Retry2": {
+        "x": 120,
+        "y": 35,
+        "w": 49,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_EnterGame1": {
+        "x": 0,
+        "y": 35,
+        "w": 110,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartGame": {
+        "x": 120,
+        "y": 142,
+        "w": 20,
+        "h": 20,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PauseDownload": {
+        "x": 164,
+        "y": 70,
+        "w": 25,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "uid01": {
+        "x": 120,
+        "y": 70,
+        "w": 34,
+        "h": 19,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_TextStartUpdate": {
+        "x": 0,
+        "y": 168,
+        "w": 76,
+        "h": 17,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_TextStartGame": {
+        "x": 0,
+        "y": 139,
+        "w": 77,
+        "h": 19,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "uid02": {
+        "x": 153,
+        "y": 105,
+        "w": 29,
+        "h": 14,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ContinueDownload": {
+        "x": 86,
+        "y": 168,
+        "w": 20,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartUpdate": {
+        "x": 120,
+        "y": 105,
+        "w": 23,
+        "h": 27,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    }
+}

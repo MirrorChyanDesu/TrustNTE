@@ -1,0 +1,497 @@
+{
+    "Nte_ItemObtained": {
+        "x": 305,
+        "y": 105,
+        "w": 95,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MaxFishBait": {
+        "x": 188,
+        "y": 301,
+        "w": 28,
+        "h": 34,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PurchasePrompt": {
+        "x": 244,
+        "y": 260,
+        "w": 50,
+        "h": 28,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PurchasePrompt1": {
+        "x": 301,
+        "y": 298,
+        "w": 49,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ChangeFishBaitPurchase1": {
+        "x": 244,
+        "y": 298,
+        "w": 47,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Purchase": {
+        "x": 365,
+        "y": 260,
+        "w": 51,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ConfirmChange": {
+        "x": 304,
+        "y": 260,
+        "w": 51,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ReturnFlowFishCabin": {
+        "x": 188,
+        "y": 183,
+        "w": 58,
+        "h": 30,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_WarehouseOverflow": {
+        "x": 0,
+        "y": 0,
+        "w": 157,
+        "h": 37,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_UniversalFishBait1": {
+        "x": 188,
+        "y": 269,
+        "w": 46,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_UniversalFishBait2": {
+        "x": 188,
+        "y": 345,
+        "w": 38,
+        "h": 17,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NoFishObtainedYet": {
+        "x": 137,
+        "y": 105,
+        "w": 68,
+        "h": 33,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PullRod2": {
+        "x": 404,
+        "y": 47,
+        "w": 26,
+        "h": 17,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PullRod3": {
+        "x": 137,
+        "y": 404,
+        "w": 39,
+        "h": 20,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_SellSuccess": {
+        "x": 167,
+        "y": 0,
+        "w": 113,
+        "h": 27,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_OneClickSellFish": {
+        "x": 300,
+        "y": 47,
+        "w": 94,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ChangeFishBaitPurchase": {
+        "x": 244,
+        "y": 223,
+        "w": 52,
+        "h": 27,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingTackleShop": {
+        "x": 256,
+        "y": 183,
+        "w": 59,
+        "h": 29,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishCabin": {
+        "x": 238,
+        "y": 47,
+        "w": 52,
+        "h": 48,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishBaitInsufficient": {
+        "x": 66,
+        "y": 398,
+        "w": 61,
+        "h": 29,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingLine2": {
+        "x": 137,
+        "y": 362,
+        "w": 40,
+        "h": 32,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingLine1": {
+        "x": 66,
+        "y": 285,
+        "w": 47,
+        "h": 44,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PullRod1": {
+        "x": 188,
+        "y": 223,
+        "w": 46,
+        "h": 36,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Fish_A": {
+        "x": 66,
+        "y": 105,
+        "w": 61,
+        "h": 52,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Fish_S": {
+        "x": 0,
+        "y": 305,
+        "w": 50,
+        "h": 44,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CastRod2": {
+        "x": 66,
+        "y": 167,
+        "w": 43,
+        "h": 49,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CastRod3": {
+        "x": 0,
+        "y": 174,
+        "w": 43,
+        "h": 59,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CastRod4": {
+        "x": 137,
+        "y": 183,
+        "w": 41,
+        "h": 49,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CastRod5": {
+        "x": 66,
+        "y": 226,
+        "w": 43,
+        "h": 49,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CastRod6": {
+        "x": 0,
+        "y": 359,
+        "w": 42,
+        "h": 52,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseFishSuccess1": {
+        "x": 306,
+        "y": 223,
+        "w": 56,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Fish_B": {
+        "x": 0,
+        "y": 105,
+        "w": 56,
+        "h": 59,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishSuccess1": {
+        "x": 137,
+        "y": 302,
+        "w": 35,
+        "h": 50,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishSuccess2": {
+        "x": 137,
+        "y": 242,
+        "w": 35,
+        "h": 50,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishSuccess3": {
+        "x": 66,
+        "y": 339,
+        "w": 42,
+        "h": 49,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseFishSuccess2": {
+        "x": 372,
+        "y": 223,
+        "w": 54,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CastRod7": {
+        "x": 0,
+        "y": 243,
+        "w": 43,
+        "h": 52,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartFishing2": {
+        "x": 124,
+        "y": 47,
+        "w": 104,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartFishing3": {
+        "x": 0,
+        "y": 47,
+        "w": 114,
+        "h": 48,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingInteract5": {
+        "x": 137,
+        "y": 148,
+        "w": 82,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingInteract4": {
+        "x": 229,
+        "y": 148,
+        "w": 82,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingInteract3": {
+        "x": 325,
+        "y": 183,
+        "w": 79,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingInteract2": {
+        "x": 321,
+        "y": 148,
+        "w": 79,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartFishing1": {
+        "x": 290,
+        "y": 0,
+        "w": 106,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_FishingInteract1": {
+        "x": 215,
+        "y": 105,
+        "w": 80,
+        "h": 28,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    }
+}

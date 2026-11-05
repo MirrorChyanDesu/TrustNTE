@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="TrustNTE.Views.Pages.TaskModules.AutoRedeemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:TrustNTE.Views.Controls"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+	<ui:CardExpander Margin="0,0,0,12" ContentPadding="0" IsExpanded="False">
+		<ui:CardExpander.Header>
+			<controls:TaskCardHeader Title="{helpers:Trans '自动兑换码'}"
+                                     Description="{helpers:Trans '一键填入并执行兑换码'}"
+                                     IconImage="Assets/redeem_icon.png">
+				<!-- 启动/停止同格叠加，与全部任务卡片按钮列对齐（此前已统一） -->
+				<controls:TaskCardHeader.HeaderContent>
+					<Grid>
+						<ui:Button Content="{helpers:Trans '启动'}" Command="{Binding StartCommand}" Width="72"
+                                   Visibility="{Binding IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+						<ui:Button Content="{helpers:Trans '停止'}" Command="{Binding StopCommand}" Appearance="Danger" Width="72"
+                                   Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+					</Grid>
+				</controls:TaskCardHeader.HeaderContent>
+			</controls:TaskCardHeader>
+		</ui:CardExpander.Header>
+		<StackPanel>
+			<Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+			<!-- [   改位置] 移除原"配置"弹窗按钮，改为卡片内直接输入 -->
+			<!-- [   改原因] 兑换码是纯文本列表，直接输入比弹窗少一次跳转；头部按钮列几何不变 -->
+			<controls:SettingItem Title="兑换码列表" Description="每行一个兑换码，运行时按行依次自动兑换；空行自动忽略">
+				<ui:TextBox Width="420" Height="110"
+                            AcceptsReturn="True"
+                            TextWrapping="Wrap"
+                            VerticalScrollBarVisibility="Auto"
+                            Text="{Binding Config.RedeemCodes, UpdateSourceTrigger=PropertyChanged}"
+                            PlaceholderText="例如：&#x0a;NTExxxxxx&#x0a;NTEyyyyyy"/>
+			</controls:SettingItem>
+		</StackPanel>
+	</ui:CardExpander>
+</UserControl>

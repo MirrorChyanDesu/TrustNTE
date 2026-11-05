@@ -1,0 +1,72 @@
+<UserControl x:Class="TrustNTE.Views.Pages.TaskModules.AutoApartmentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:TrustNTE.Views.Controls"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+    <ui:CardExpander Margin="0,0,0,12" ContentPadding="0" IsExpanded="False">
+        <ui:CardExpander.Header>
+            <controls:TaskCardHeader Title="{helpers:Trans '自动公寓'}" 
+                                     Description="{helpers:Trans '公寓自动领取奖励'}" 
+                                     IconImage="Assets/apartment_icon.png">
+                <controls:TaskCardHeader.HeaderContent>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="{helpers:Trans '启动'}" Command="{Binding StartCommand}" Width="72"  Visibility="{Binding IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+                        <ui:Button Content="{helpers:Trans '停止'}" Command="{Binding StopCommand}" Appearance="Danger" Width="72" Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </controls:TaskCardHeader.HeaderContent>
+            </controls:TaskCardHeader>
+        </ui:CardExpander.Header>
+        
+        <StackPanel>
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            
+            <controls:SettingItem Title="传送至" Description="选择公寓地点">
+                <ComboBox Width="180" ItemsSource="{Binding TeleportTargets}" SelectedItem="{Binding Config.TeleportTarget}"/>
+            </controls:SettingItem>
+
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <controls:SettingItem Title="金边管家 - 体力消耗" Description="不能是0，必须是60整数倍，且不超过360">
+                <ui:TextBox Width="100" Text="{Binding Config.StaminaCost, UpdateSourceTrigger=LostFocus}"/>
+            </controls:SettingItem>
+
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16,10,16,10">
+                <ui:TextBlock Text="确保所选的对应挑战是有通关过的！不然会出bug" Foreground="{ui:ThemeResource SystemFillColorCautionBrush}" FontWeight="Bold"/>
+            </Grid>
+
+            <!-- 第一组舞台 -->
+            <controls:SettingItem Title="魔术舞台" Description="选择大关卡与小关卡">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Width="180" Margin="0,0,10,0" ItemsSource="{Binding Stages}" SelectedItem="{Binding Config.Stage1}"/>
+                    <ComboBox Width="180" ItemsSource="{Binding Challenges1}" SelectedItem="{Binding Config.Challenge1}"/>
+                </StackPanel>
+            </controls:SettingItem>
+
+            <!-- 第二组舞台 -->
+            <controls:SettingItem Title="诡计舞台" Description="选择大关卡与小关卡">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Width="180" Margin="0,0,10,0" ItemsSource="{Binding Stages}" SelectedItem="{Binding Config.Stage2}"/>
+                    <ComboBox Width="180" ItemsSource="{Binding Challenges2}" SelectedItem="{Binding Config.Challenge2}"/>
+                </StackPanel>
+            </controls:SettingItem>
+
+            <!-- 第三组舞台 -->
+            <controls:SettingItem Title="罐头工厂" Description="选择大关卡与小关卡">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Width="180" Margin="0,0,10,0" ItemsSource="{Binding Stages}" SelectedItem="{Binding Config.Stage3}"/>
+                    <ComboBox Width="180" ItemsSource="{Binding Challenges3}" SelectedItem="{Binding Config.Challenge3}"/>
+                </StackPanel>
+            </controls:SettingItem>
+
+            <!-- 第四组舞台 -->
+            <controls:SettingItem Title="兔子洞" Description="选择大关卡与小关卡">
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox Width="180" Margin="0,0,10,0" ItemsSource="{Binding Stages}" SelectedItem="{Binding Config.Stage4}"/>
+                    <ComboBox Width="180" ItemsSource="{Binding Challenges4}" SelectedItem="{Binding Config.Challenge4}"/>
+                </StackPanel>
+            </controls:SettingItem>
+
+        </StackPanel>
+    </ui:CardExpander>
+</UserControl>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TrustNTE 实时预览</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: #1e1e1e;
+            color: #ddd;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .controls {
+            background: #2d2d2d;
+            padding: 15px 30px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        select {
+            background: #3f3f3f;
+            color: white;
+            border: 1px solid #555;
+            padding: 5px 10px;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+        select:hover { background: #4f4f4f; }
+        img {
+            max-width: 100%;
+            max-height: 80vh;
+            border: 2px solid #444;
+            border-radius: 8px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            /* 防止画面切换时闪烁 */
+            image-rendering: high-quality; 
+        }
+        label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2 style='margin-top:0; color:#fff;'>TrustNTE 画面串流</h2>
+    <div class='controls'>
+        <label>
+            画质:
+            <select id='quality' onchange='updateStream()'>
+                <option value='100'>原画 (100%)</option>
+                <option value='80' selected>高清 (80%)</option>
+                <option value='50'>流畅 (50%)</option>
+                <option value='30'>极速 (30%)</option>
+            </select>
+        </label>
+        <label>
+            帧数 (FPS):
+            <select id='fps' onchange='updateStream()'>
+                <option value='10'>10 帧 / 秒</option>
+                <option value='20' selected>20 帧 / 秒</option>
+                <option value='30'>30 帧 / 秒</option>
+                <option value='60'>60 帧 / 秒 (高负载)</option>
+            </select>
+        </label>
+    </div>
+    <!-- 默认播放 80% 画质，20帧 -->
+    <img id='stream' src='/api/v1/stream?quality=80&fps=20' />
+
+    <script>
+        function updateStream() {
+            var q = document.getElementById('quality').value;
+            var f = document.getElementById('fps').value;
+            // 更改 img 的 src，浏览器会自动断开旧连接并开启新连接
+            // 加上时间戳 t=Date.now() 是为了强制浏览器刷新，防止缓存
+            document.getElementById('stream').src = '/api/v1/stream?quality=' + q + '&fps=' + f + '&t=' + Date.now();
+        }
+    </script>
+</body>
+</html>

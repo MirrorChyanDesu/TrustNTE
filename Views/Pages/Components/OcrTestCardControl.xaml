@@ -1,0 +1,99 @@
+<UserControl x:Class="TrustNTE.Views.Pages.Components.OcrTestCardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+
+    <ui:CardExpander Margin="0,0,0,12" ContentPadding="0" Icon="{ui:SymbolIcon TextBulletListSquare24}" IsExpanded="False">
+        <!-- 卡片头部 -->
+        <ui:CardExpander.Header>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <ui:TextBlock FontTypography="Body" Text="文字 OCR 测试" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="极速 ONNX 识别游戏内动态文字" />
+                </StackPanel>
+
+                <ui:HyperlinkButton Grid.Column="1" Content="文档" 
+                                    Command="{Binding ShowOcrDocsCommand}" 
+                                    Icon="{ui:SymbolIcon BookQuestionMark24}" 
+                                    Margin="0,0,24,0" VerticalAlignment="Center" />
+            </Grid>
+        </ui:CardExpander.Header>
+
+        <!-- 卡片内容 -->
+        <StackPanel Margin="16,8">
+
+            <!-- 测试按钮与范围提示 -->
+            <WrapPanel Margin="0,0,0,15" VerticalAlignment="Center">
+                <ui:Button Content="测试区域 (左下角 UID)" 
+                           Command="{Binding TestUidOcrCommand}" 
+                           Width="72" 
+                           Margin="0,0,15,0" />
+                <ui:TextBlock Text="范围: 3,1051 宽高:193,27 (确保游戏内 UID 没被遮挡)" 
+                              VerticalAlignment="Center" 
+                              Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+            </WrapPanel>
+
+            <Separator Margin="0,0,0,15" BorderThickness="0,1,0,0" />
+
+            <!-- 加载 det 模型路径 -->
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ui:TextBlock Grid.Column="0" Text="加载 det 模型路径：" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ui:TextBox Grid.Column="1" 
+                            Text="{Binding DetModelPath, UpdateSourceTrigger=PropertyChanged}" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,10,0" 
+                            IsReadOnly="True" 
+                            PlaceholderText="未找到 det.onnx" />
+                <ui:Button Grid.Column="2" 
+                           Content="打开目录" 
+                           Command="{Binding OpenModelFolderCommand}" 
+                           CommandParameter="{Binding DetModelPath}" 
+                           VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- 加载 rec 模型路径 -->
+            <Grid Margin="0,0,0,15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ui:TextBlock Grid.Column="0" Text="加载 rec 模型路径：" VerticalAlignment="Center" Margin="0,0,10,0"/>
+
+                <!-- 【   改位置】原先是 ui:TextBlock TextWrapping="Wrap"，现改为 ui:TextBox -->
+                <!-- 【   改原因】因为路径太长，TextBlock 换行会撑高整个 Grid，把下方的“底部提示”挤出可视区域。改为单行 TextBox 可保持一致和美观。 -->
+                <ui:TextBox Grid.Column="1" 
+                            Text="{Binding RecModelPath, UpdateSourceTrigger=PropertyChanged}" 
+                            VerticalAlignment="Center" 
+                            Margin="0,0,10,0" 
+                            IsReadOnly="True" 
+                            PlaceholderText="未找到 rec.onnx" />
+
+                <ui:Button Grid.Column="2" 
+                           Content="打开目录" 
+                           Command="{Binding OpenModelFolderCommand}" 
+                           CommandParameter="{Binding RecModelPath}" 
+                           VerticalAlignment="Center"/>
+            </Grid>
+
+            <!-- 底部提示 -->
+            <!-- 【   改位置】   正了文案描述，使其与实际的 Assets\NTE-Ocr_Models 和 ppocrv6_tiny_dict.txt 对齐 -->
+            <ui:TextBlock Text="提示：如需重新配置，请直接将 det.onnx、rec.onnx 和 ppocrv6_tiny_dict.txt 放入 Assets\NTE-Ocr_Models 目录即可。" 
+                          TextWrapping="Wrap" 
+                          FontTypography="Caption" 
+                          Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" />
+
+        </StackPanel>
+    </ui:CardExpander>
+</UserControl>

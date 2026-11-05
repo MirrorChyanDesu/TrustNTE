@@ -1,0 +1,50 @@
+﻿<ui:FluentWindow x:Class="TrustNTE.Views.MapMatchDebugWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="大地图坐标调试" Height="800" Width="1000"
+                 WindowStartupLocation="CenterScreen"
+                 WindowBackdropType="Mica"
+                 ExtendsContentIntoTitleBar="True"
+                 Background="{ui:ThemeResource ApplicationBackgroundBrush}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar Grid.Row="0" Title="大地图坐标调试" ShowMaximize="True" ShowMinimize="True">
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="/Assets/titlelogo.ico" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <Border Grid.Row="1" Background="#1A000000" Padding="10" Margin="10">
+            <ui:TextBlock Text="{Binding StatusText}" FontTypography="BodyStrong" HorizontalAlignment="Center" Foreground="{ui:ThemeResource SystemFillColorSuccessBrush}"/>
+        </Border>
+
+        <!-- 核心逻辑：用 Viewbox 等比缩放，使得 Canvas 坐标完美对应原图像素 -->
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="10">
+            <Viewbox Stretch="Uniform">
+                <Grid Width="{Binding MapImage.PixelWidth}" Height="{Binding MapImage.PixelHeight}">
+                    <!-- 1. 底层大地图 -->
+                    <Image Source="{Binding MapImage}" Stretch="None" RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                    <!-- 2. 上层绘制红点 -->
+                    <Canvas>
+                        <!-- 用 TranslateTransform 让红点的中心对准坐标 -->
+                        <Ellipse Width="30" Height="30" Fill="Red" Opacity="0.8"
+                                 Canvas.Left="{Binding MarkerX}" 
+                                 Canvas.Top="{Binding MarkerY}"
+                                 Visibility="{Binding IsMarkerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <Ellipse.RenderTransform>
+                                <TranslateTransform X="-15" Y="-15"/>
+                            </Ellipse.RenderTransform>
+                        </Ellipse>
+                    </Canvas>
+                </Grid>
+            </Viewbox>
+        </ScrollViewer>
+    </Grid>
+</ui:FluentWindow>

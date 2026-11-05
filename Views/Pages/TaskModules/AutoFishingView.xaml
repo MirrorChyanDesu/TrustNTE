@@ -1,0 +1,103 @@
+<UserControl x:Class="TrustNTE.Views.Pages.TaskModules.AutoFishingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:TrustNTE.Views.Controls"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+    <ui:CardExpander Margin="0,0,0,12" ContentPadding="0" IsExpanded="False">
+        <ui:CardExpander.Header>
+            <controls:TaskCardHeader Title="{helpers:Trans '自动钓鱼'}" 
+                                     Description="{helpers:Trans '钓鱼、自动传送、统计鱼获'}" 
+                                     IconImage="Assets/fish_icon.png">
+                <controls:TaskCardHeader.HeaderContent>
+                    <StackPanel Orientation="Horizontal">
+                        <ui:Button Content="{helpers:Trans '启动'}" Command="{Binding StartCommand}" Width="72"  Visibility="{Binding IsRunning, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+                        <ui:Button Content="{helpers:Trans '停止'}" Command="{Binding StopCommand}" Appearance="Danger" Width="72" Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </controls:TaskCardHeader.HeaderContent>
+            </controls:TaskCardHeader>
+        </ui:CardExpander.Header>
+
+        <StackPanel>
+            <!-- 提示区 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <StackPanel Margin="16" MaxWidth="620" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <ui:TextBlock TextWrapping="Wrap" FontTypography="Body" LineHeight="22">
+                    <!-- 提示二字保持红色加粗 -->
+                    <Run Text="提示:" FontWeight="Bold" Foreground="{ui:ThemeResource SystemFillColorCriticalBrush}" />
+                    <!-- 后面的字换成正文白 -->
+                    <Run Text="一定要保证至少30方斯或者5个鱼鳞币用于购买鱼饵！暂时不支持传送！请站钓鱼旁边启动即可" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                </ui:TextBlock>
+
+                <ui:TextBlock TextWrapping="Wrap" FontTypography="Body" LineHeight="22" Margin="0,4,0,0">
+                    <Run Text="逻辑:抛竿→有鱼饵→抛竿！抛竿→没有鱼饵→卖鱼→买鱼饵→更换鱼饵！无限循环钓鱼,掉线与闪退都会自动重连！" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}"/>
+                </ui:TextBlock>
+            </StackPanel>
+
+            <!-- 启动钓鱼清空上次统计数量 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <ui:TextBlock FontTypography="Body" Text="启动钓鱼清空上次统计数量" />
+                </StackPanel>
+                <ui:ToggleSwitch Grid.Column="1" IsChecked="{Binding Config.ClearStatsOnStart}" VerticalAlignment="Center" />
+            </Grid>
+
+            <!-- 循环次数与关机 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <controls:SettingItem Title="循环与关机" Description="默认0无限循环，输入指定次数后自动停止或关机">
+                <StackPanel Orientation="Horizontal">
+                    <ui:TextBlock Text="循环次数:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <ui:NumberBox Value="{Binding Config.LoopCount}" MinWidth="80" Margin="0,0,15,0" ClearButtonEnabled="True" />
+
+                    <ui:ToggleSwitch IsChecked="{Binding Config.ShutdownAfterFinish}" Content="完成后关机" Margin="0,0,15,0" VerticalAlignment="Center"/>
+
+                    <ui:Button Content="取消关机" Command="{Binding CancelShutdownCommand}" Appearance="Secondary" />
+                </StackPanel>
+            </controls:SettingItem>
+
+            <!-- 鱼获统计 (颜色已按照要求   改) -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <controls:SettingItem Title="钓鱼次数统计" Description="记录成功钓到各品级鱼的数量">
+                <StackPanel Orientation="Horizontal">
+                    <ui:TextBlock Text="S级鱼类: " VerticalAlignment="Center" Foreground="#F7B312" FontWeight="Bold"/>
+                    <ui:TextBlock Text="{Binding Config.SCount}" VerticalAlignment="Center" Margin="5,0,15,0" FontWeight="Bold"/>
+
+                    <ui:TextBlock Text="A级鱼类: " VerticalAlignment="Center" Foreground="#ABB5CD" FontWeight="Bold"/>
+                    <ui:TextBlock Text="{Binding Config.ACount}" VerticalAlignment="Center" Margin="5,0,15,0" FontWeight="Bold"/>
+
+                    <ui:TextBlock Text="B级鱼类: " VerticalAlignment="Center" Foreground="#CEAE6B" FontWeight="Bold"/>
+                    <ui:TextBlock Text="{Binding Config.BCount}" VerticalAlignment="Center" Margin="5,0,15,0" FontWeight="Bold"/>
+
+                    <ui:TextBlock Text="总数: " VerticalAlignment="Center" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" FontWeight="Bold"/>
+                    <ui:TextBlock Text="{Binding TotalFishCount}" VerticalAlignment="Center" Margin="5,0,15,0" FontWeight="Bold"/>
+
+                    <ui:Button Content="清除统计" Command="{Binding ClearStatsCommand}" Appearance="Secondary" />
+                </StackPanel>
+            </controls:SettingItem>
+
+            <!-- ROI 控制区域 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <controls:SettingItem Title="ROI区域 千万别乱打开调试页面" Description="调试时可以直接框选ROI→不懂别乱打开调试,针对4K玩家而设计">
+                <StackPanel Orientation="Horizontal">
+                    <!-- 按钮顺序：调试 -> 重置 -> 输入框 -->
+                    <ui:Button Content="调试" Command="{Binding OpenPreviewWindowCommand}" Width="72" Margin="0,0,10,0"/>
+
+                    <!-- 重置按钮：去掉了 Appearance="Caution" -->
+                    <ui:Button Content="重置" 
+                               Command="{Binding ResetRoiCommand}" 
+                               Margin="0,0,10,0" 
+                               Width="72"
+                               ToolTip="恢复默认的 1080P ROI 区域"/>
+
+                    <ui:TextBox Width="150" 
+                                Text="{Binding Config.ControlRoiStr, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </controls:SettingItem>
+        </StackPanel>
+    </ui:CardExpander>
+</UserControl>

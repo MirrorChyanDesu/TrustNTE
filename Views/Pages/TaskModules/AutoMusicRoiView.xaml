@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="TrustNTE.Views.Pages.TaskModules.AutoMusicRoiView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:TrustNTE.Views.Controls">
+    <StackPanel>
+        <!-- D 键 -->
+        <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+        <controls:SettingItem Title="D 键判定圆心" Description="画面比例坐标，强烈建议在【调试页面】直接用鼠标拖拽">
+            <StackPanel Orientation="Horizontal">
+                <ui:TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiD.X}" MaxDecimalPlaces="4" MinWidth="80" Margin="0,0,15,0"/>
+                <ui:TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiD.Y}" MaxDecimalPlaces="4" MinWidth="80"/>
+            </StackPanel>
+        </controls:SettingItem>
+
+        <!-- F 键 -->
+        <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+        <controls:SettingItem Title="F 键判定圆心" Description="画面比例坐标，强烈建议在【调试页面】直接用鼠标拖拽">
+            <StackPanel Orientation="Horizontal">
+                <ui:TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiF.X}" MaxDecimalPlaces="4" MinWidth="80" Margin="0,0,15,0"/>
+                <ui:TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiF.Y}" MaxDecimalPlaces="4" MinWidth="80"/>
+            </StackPanel>
+        </controls:SettingItem>
+
+        <!-- J 键 -->
+        <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+        <controls:SettingItem Title="J 键判定圆心" Description="画面比例坐标，强烈建议在【调试页面】直接用鼠标拖拽">
+            <StackPanel Orientation="Horizontal">
+                <ui:TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiJ.X}" MaxDecimalPlaces="4" MinWidth="80" Margin="0,0,15,0"/>
+                <ui:TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiJ.Y}" MaxDecimalPlaces="4" MinWidth="80"/>
+            </StackPanel>
+        </controls:SettingItem>
+
+        <!-- K 键 -->
+        <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+        <controls:SettingItem Title="K 键判定圆心" Description="画面比例坐标，强烈建议在【调试页面】直接用鼠标拖拽">
+            <StackPanel Orientation="Horizontal">
+                <ui:TextBlock Text="X:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiK.X}" MaxDecimalPlaces="4" MinWidth="80" Margin="0,0,15,0"/>
+                <ui:TextBlock Text="Y:" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                <ui:NumberBox Value="{Binding Config.RoiK.Y}" MaxDecimalPlaces="4" MinWidth="80"/>
+            </StackPanel>
+        </controls:SettingItem>
+    </StackPanel>
+</UserControl>

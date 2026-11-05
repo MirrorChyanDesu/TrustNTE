@@ -1,0 +1,129 @@
+<UserControl x:Class="TrustNTE.Views.Pages.Components.CaptureCardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers">
+
+    <!-- 🚨 核心修复：删除了写死的 IsExpanded="False"，改为绑定 ViewModel -->
+    <ui:CardExpander Margin="0,12,0,12" ContentPadding="0" Icon="{ui:SymbolIcon Play24}" IsExpanded="{Binding IsCaptureExpanderExpanded, Mode=TwoWay}">
+        <ui:CardExpander.Header>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <ui:TextBlock Grid.Row="0" Grid.Column="0" FontTypography="Body" Text="{helpers:Trans 'TrustNTE 截图器，启动！'}" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                <ui:TextBlock Grid.Row="1" Grid.Column="0" FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '截图器启动后才能使用各项功能。'}" />
+
+                <StackPanel Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,0,24,0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <ui:ProgressRing IsIndeterminate="True" Width="20" Height="20" Margin="0,0,10,0"
+                                     Visibility="{Binding IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+                    <ui:Button Command="{Binding ToggleCaptureCommand}"
+                               Content="{Binding StartButtonText}"
+                               Appearance="{Binding IsRunning, Converter={StaticResource ButtonAppearanceConverter}}">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="{Binding IsRunning, Converter={StaticResource ButtonIconConverter}}" Filled="True" />
+                        </ui:Button.Icon>
+                    </ui:Button>
+                </StackPanel>
+            </Grid>
+        </ui:CardExpander.Header>
+
+        <StackPanel>
+            <!-- 截图引擎选择 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <ui:TextBlock FontTypography="Body" Text="{helpers:Trans '截图引擎选择'}" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '默认即可！当无画面时选择其他'}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,36,0" VerticalAlignment="Center">
+                    <ui:HyperlinkButton Content="{helpers:Trans '文档'}" 
+                                        Command="{Binding ShowCaptureHelpCommand}" 
+                                        Icon="{ui:SymbolIcon BookQuestionMark24}"
+                                        Margin="0,0,16,0"
+                                        ToolTip="点击查看截图引擎选择指南"/>
+                    <ComboBox Width="180"
+                              ItemsSource="{Binding CaptureModes}"
+                              SelectedItem="{Binding SelectedCaptureMode}"
+                              VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+
+            <!-- 抓帧间隔 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <ui:TextBlock FontTypography="Body" Text="{helpers:Trans '抓帧间隔（毫秒）'}" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '默认50即可。支持运行中实时   改，千万别低于10！'}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,36,0" VerticalAlignment="Center">
+                    <ui:HyperlinkButton Content="{helpers:Trans '文档'}" 
+                                        Command="{Binding ShowTriggerIntervalHelpCommand}" 
+                                        Icon="{ui:SymbolIcon BookQuestionMark24}"
+                                        Margin="0,0,16,0"
+                                        ToolTip="点击查看抓帧指南"/>
+                    <ui:TextBox Width="180" 
+                                Text="{Binding TriggerInterval, UpdateSourceTrigger=PropertyChanged}" 
+                                VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+
+            <!-- 鼠标驱动 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <ui:TextBlock FontTypography="Body" Text="鼠标驱动" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="最好前往下方测试后再来选择" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,36,0" VerticalAlignment="Center">
+                    <ui:HyperlinkButton Content="{helpers:Trans '文档'}" 
+                                        Command="{Binding ShowMouseDriveHelpCommand}" 
+                                        Icon="{ui:SymbolIcon BookQuestionMark24}"
+                                        Margin="0,0,16,0"
+                                        ToolTip="点击查看鼠标驱动选择指南"/>
+                    <ComboBox Width="180" 
+                              ItemsSource="{Binding MouseDriveTypes}" 
+                              SelectedItem="{Binding MouseDriveType, Mode=TwoWay}" 
+                              VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+
+            <!-- 独立预览窗口 -->
+            <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
+            <Grid Margin="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <ui:TextBlock FontTypography="Body" Text="{helpers:Trans '独立预览窗口'}" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '预览窗口给你看有没有获取到游戏画面的！'}" />
+                </StackPanel>
+                <ui:Button Grid.Column="1" Margin="0,0,36,0" 
+                           Content="{Binding PreviewButtonText}" 
+                           Command="{Binding TogglePreviewWindowCommand}"
+                           VerticalAlignment="Center" />
+            </Grid>
+        </StackPanel>
+    </ui:CardExpander>
+</UserControl>

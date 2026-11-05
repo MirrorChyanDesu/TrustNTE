@@ -1,0 +1,46 @@
+{
+    "Nte_Performing": {
+        "x": 64,
+        "y": 0,
+        "w": 16,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartPerformance2": {
+        "x": 52,
+        "y": 36,
+        "w": 43,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StartPerformance1": {
+        "x": 0,
+        "y": 36,
+        "w": 42,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PerformanceIncome": {
+        "x": 0,
+        "y": 0,
+        "w": 54,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    }
+}

@@ -1,0 +1,59 @@
+<UserControl x:Class="TrustNTE.Views.Pages.RecordPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}">
+
+    <!-- 【   改点 1】将原来右侧的 0 改成了 42，让左右边距对称，完美变成矩形 -->
+    <Grid Margin="42,16,42,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 顶部操作栏 -->
+        <ui:Card Grid.Row="0" Margin="0,0,0,12" Padding="16,12">
+            <Grid>
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button Content="打开宏目录" Icon="{ui:SymbolIcon FolderOpen24}" Command="{Binding OpenDirectoryCommand}" Margin="0,0,12,0"/>
+
+                    <ui:Button Content="开始录制" Icon="{ui:SymbolIcon Record24}" Appearance="Danger" 
+                               Command="{Binding ToggleRecordCommand}" Margin="0,0,12,0"
+                               Visibility="{Binding IsRecording, Converter={StaticResource BooleanToInverseVisibilityConverter}}"/>
+
+                    <ui:Button Content="停止录制" Icon="{ui:SymbolIcon Stop24}" Appearance="Caution" 
+                               Command="{Binding ToggleRecordCommand}"
+                               Visibility="{Binding IsRecording, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                    <ui:Button Content="保存录制" Icon="{ui:SymbolIcon Save24}" Width="72" 
+                               Command="{Binding SaveRecordCommand}" Margin="12,0,0,0"/>
+                </StackPanel>
+
+                <!-- 【   改点 2】优化右上角排版，给两段文字之间加上合理的间距，防止拥挤 -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <ui:TextBlock Text="{Binding RecordTime}" FontTypography="Subtitle" 
+                                  Foreground="{ui:ThemeResource SystemFillColorCriticalBrush}" 
+                                  Margin="0,0,16,0" VerticalAlignment="Center"/>
+                    <ui:TextBlock Text="{Binding StatusText}" FontTypography="Body" 
+                                  VerticalAlignment="Center" Margin="0,0,8,0"/>
+                </StackPanel>
+            </Grid>
+        </ui:Card>
+
+        <!-- 说明区域 -->
+        <ui:Card Grid.Row="1" Padding="20">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ui:SymbolIcon Symbol="Keyboard24" FontSize="64" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,20"/>
+
+                <ui:TextBlock Text="录制与回放功能" FontTypography="Title" Margin="0,0,0,20"/>
+
+                <StackPanel HorizontalAlignment="Center" Margin="0,0,0,10">
+                    <ui:TextBlock Text="1. 确保已启动游戏截图器。" LineHeight="24" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+                    <ui:TextBlock Text="2. 点击开始录制，在游戏内进行操作。" LineHeight="24" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+                    <ui:TextBlock Text="3. 停止并保存宏文件。" LineHeight="24" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+                    <ui:TextBlock Text="4. 在调度器中即可调用录制的键鼠宏任务。" LineHeight="24" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
+                </StackPanel>
+            </StackPanel>
+        </ui:Card>
+    </Grid>
+</UserControl>

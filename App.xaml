@@ -1,0 +1,45 @@
+﻿<Application x:Class="TrustNTE.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:helper="clr-namespace:TrustNTE.Helpers">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemesDictionary Theme="Dark" />
+                <ui:ControlsDictionary />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- ========================================== -->
+            <!-- 引入 MiSans 字体 -->
+            <!-- ========================================== -->
+            <FontFamily x:Key="AppFontRegular">/Assets/Fonts/#MiSans</FontFamily>
+            <FontFamily x:Key="AppFontSemibold">/Assets/Fonts/#MiSans Semibold</FontFamily>
+
+            <!-- 全局应用：让所有 Window 和 UserControl 默认使用 MiSans 常规体 -->
+            <Style TargetType="{x:Type Window}">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontRegular}" />
+            </Style>
+            <Style TargetType="{x:Type UserControl}">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontRegular}" />
+            </Style>
+            <!-- TextBlock 很多时候需要单独指定，确保它能继承 -->
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontFamily" Value="{DynamicResource AppFontRegular}" />
+            </Style>
+
+            <helper:ButtonAppearanceConverter x:Key="ButtonAppearanceConverter" />
+            <helper:ButtonIconConverter x:Key="ButtonIconConverter" />
+            <helper:StringToBoolConverter x:Key="StringToBoolConverter" />
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <helper:BooleanToInverseVisibilityConverter x:Key="BooleanToInverseVisibilityConverter"/>
+            <helper:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <helper:NullToCollapsedConverter x:Key="NullToCollapsedConverter"/>
+            <helper:KeyNameToVkConverter x:Key="KeyNameToVkConverter" />
+
+            <Style TargetType="{x:Type Control}">
+                <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,24 @@
+description: Ultralytics Nte_RecognizeEnemy model trained on D:\yolo\data.yaml
+author: Ultralytics
+date: '2026-11-04T20:39:20.723276+08:00'
+version: 8.4.195
+license: AGPL-3.0 License (https://ultralytics.com/license)
+docs: https://docs.ultralytics.com
+stride: 32
+task: detect
+head: Detect
+batch: 1
+imgsz:
+- 640
+- 640
+names:
+  0: LV
+args:
+  data: null
+  batch: 1
+  fraction: 1.0
+  quantize: null
+  nms: null
+  dynamic: false
+channels: 3
+end2end: false

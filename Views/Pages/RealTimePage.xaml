@@ -1,0 +1,28 @@
+<UserControl x:Class="TrustNTE.Views.Pages.RealTimePage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:helpers="clr-namespace:TrustNTE.Helpers"
+             xmlns:comp="clr-namespace:TrustNTE.Views.Pages.Components"
+             Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}">
+
+    <Grid Margin="42,16,0,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,42,0">
+                <ui:TextBlock FontTypography="Subtitle" Text="{helpers:Trans '实时触发的自动化任务设置'}" Margin="0,0,0,12" />
+
+                <comp:AutoLootControl DataContext="{Binding}" />
+                <comp:AutoCombatControl DataContext="{Binding}" />
+                <comp:AutoDialogueControl DataContext="{Binding}" />
+                <comp:MonthlyCardControl DataContext="{Binding}" />
+                <comp:DailyRewardControl DataContext="{Binding}" />
+                <comp:MapMatchControl DataContext="{Binding}" />
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

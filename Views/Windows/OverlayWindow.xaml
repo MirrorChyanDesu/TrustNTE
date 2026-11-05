@@ -1,0 +1,11 @@
+<Window x:Class="TrustNTE.Views.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:TrustNTE.Views.Controls"
+        Title="OverlayWindow" Height="220" Width="480"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" 
+        ShowInTaskbar="False" Topmost="True">
+    <Border x:Name="MainBorder" Background="#B3121212" CornerRadius="8" BorderThickness="1" BorderBrush="#33FFFFFF" Padding="10">
+        <controls:LogConsoleControl x:Name="LogConsole" Title="游戏状态监控" />
+    </Border>
+</Window>

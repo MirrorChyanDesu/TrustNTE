@@ -1,0 +1,63 @@
+﻿<ui:FluentWindow x:Class="TrustNTE.Views.Windows.AutoMusicDocWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 Title="音游参数配置指南" Width="600" Height="650"
+                 WindowStartupLocation="CenterOwner" ExtendsContentIntoTitleBar="True" WindowBackdropType="Mica">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题栏 -->
+        <ui:TitleBar Grid.Row="0" Title="音游参数配置指南" ShowMinimize="False" ShowMaximize="False" ShowClose="True" Background="Transparent"/>
+
+        <!-- 滚动内容区 -->
+        <ScrollViewer Grid.Row="1" Margin="24,10,24,0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="0,0,0,20">
+                <!-- 说明书核心内容 -->
+                <ui:TextBlock FontTypography="Subtitle" Text="▶ 1. 触发与复位（最核心调参区）" Margin="0,10,0,5"/>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22">
+                    <Run Text="• 触发像素：" FontWeight="Bold"/>
+                    <Run Text="判定圈里出现了多少个特征点（黑块或音符色）就按键。漏键就调小（如10）；乱按就调大（如20）。"/>
+                </ui:TextBlock>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">
+                    <Run Text="• 复位像素：" FontWeight="Bold"/>
+                    <Run Text="打完后，像素降到多少算这个音符“走远了”。防连按调大（如5）；极速连打调小（如1）。"/>
+                </ui:TextBlock>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">
+                    <Run Text="• 强制复位ms：" FontWeight="Bold"/>
+                    <Run Text="超时强行解锁，防止白圈太长挡住画面卡死。连打总漏就调小（如80），总是瞎按就调大（如150）。"/>
+                </ui:TextBlock>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">
+                    <Run Text="• V≤：" FontWeight="Bold"/>
+                    <Run Text="多暗的颜色才算“黑色特效”。0是纯黑，255是纯白，推荐30~80。"/>
+                </ui:TextBlock>
+
+                <ui:TextBlock FontTypography="Subtitle" Text="▶ 2. 响应与间隔（手感调节）" Margin="0,20,0,5"/>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22">
+                    <Run Text="• 间隔ms：" FontWeight="Bold"/>
+                    <Run Text="两次按键的最短冷却时间。调太大容易漏音，调太小容易卡顿（推荐15~40）。"/>
+                </ui:TextBlock>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">
+                    <Run Text="• 按住ms：" FontWeight="Bold"/>
+                    <!-- 👇 注意这里，刚才报错就是因为这里的 < 符号，现在已经转义为 &lt; -->
+                    <Run Text="模拟键盘按住的时间。太短（&lt;5ms）有的游戏会判定无效吞键（推荐15~25）。"/>
+                </ui:TextBlock>
+                <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">
+                    <Run Text="• 半径：" FontWeight="Bold"/>
+                    <Run Text="判定圈的大小。调大会把远处的音符也框进来，调小更精准。"/>
+                </ui:TextBlock>
+
+                <ui:TextBlock FontTypography="Subtitle" Text="▶ 3. 判定圆心与调试" Margin="0,20,0,5"/>
+                <ui:TextBlock Text="强烈建议打歌时打开【调试画面】，用鼠标拖拽画面上的四个绿圈（对应 D、F、J、K 的判定正中心）。滚轮可以调字大字号。" TextWrapping="Wrap" LineHeight="22"/>
+                <ui:TextBlock Text="本程序采用“纯黑特征”+“底色消失”+“特定音符色”三重防漏键判定，只要画面中出现了特征，就会触发按键。" TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 底部关闭按钮 -->
+        <ui:Button Grid.Row="2" Content="我知道了" Appearance="Primary" HorizontalAlignment="Right" Margin="24,10,24,20" Click="BtnClose_Click" Width="100"/>
+    </Grid>
+</ui:FluentWindow>

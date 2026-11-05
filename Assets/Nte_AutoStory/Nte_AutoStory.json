@@ -1,0 +1,739 @@
+{
+    "Nte_HathorDelivery2": {
+        "x": 95,
+        "y": 78,
+        "w": 129,
+        "h": 34,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_HathorDelivery1": {
+        "x": 314,
+        "y": 278,
+        "w": 124,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CancelTrackTask1": {
+        "x": 366,
+        "y": 78,
+        "w": 108,
+        "h": 31,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CancelTrackTask2": {
+        "x": 198,
+        "y": 202,
+        "w": 109,
+        "h": 29,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GetReward1": {
+        "x": 0,
+        "y": 229,
+        "w": 75,
+        "h": 51,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GetReward2": {
+        "x": 0,
+        "y": 104,
+        "w": 85,
+        "h": 54,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GetReward3": {
+        "x": 0,
+        "y": 40,
+        "w": 85,
+        "h": 54,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseChessboard3": {
+        "x": 95,
+        "y": 421,
+        "w": 92,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_SkipChessboard3": {
+        "x": 169,
+        "y": 456,
+        "w": 18,
+        "h": 18,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_SkipChessboard1": {
+        "x": 464,
+        "y": 381,
+        "w": 28,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseChessboard2": {
+        "x": 198,
+        "y": 313,
+        "w": 105,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_SkipChessboard2": {
+        "x": 378,
+        "y": 481,
+        "w": 22,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseChessboard1": {
+        "x": 198,
+        "y": 347,
+        "w": 94,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DungeonClaim": {
+        "x": 95,
+        "y": 340,
+        "w": 79,
+        "h": 31,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ClickBlank3": {
+        "x": 317,
+        "y": 202,
+        "w": 107,
+        "h": 27,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ClickBlank2": {
+        "x": 198,
+        "y": 278,
+        "w": 106,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ClickBlank1": {
+        "x": 310,
+        "y": 241,
+        "w": 106,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GetReward4": {
+        "x": 0,
+        "y": 168,
+        "w": 75,
+        "h": 51,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CancelTrackTask3": {
+        "x": 198,
+        "y": 241,
+        "w": 102,
+        "h": 27,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PressVTrackTask2": {
+        "x": 266,
+        "y": 170,
+        "w": 142,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PressVTrackTask1": {
+        "x": 95,
+        "y": 40,
+        "w": 157,
+        "h": 28,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Teleport2": {
+        "x": 313,
+        "y": 448,
+        "w": 49,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Teleport1": {
+        "x": 436,
+        "y": 313,
+        "w": 53,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_TrackTask": {
+        "x": 214,
+        "y": 122,
+        "w": 110,
+        "h": 35,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GoTask": {
+        "x": 0,
+        "y": 423,
+        "w": 58,
+        "h": 55,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MessageInteract_2": {
+        "x": 0,
+        "y": 357,
+        "w": 59,
+        "h": 56,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MessageInteract_1": {
+        "x": 0,
+        "y": 290,
+        "w": 63,
+        "h": 57,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Teleport3": {
+        "x": 375,
+        "y": 313,
+        "w": 51,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DialogueMessage": {
+        "x": 313,
+        "y": 348,
+        "w": 55,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DialogueEnd": {
+        "x": 313,
+        "y": 381,
+        "w": 53,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_YunTongCitywideDeliveryCompleted": {
+        "x": 438,
+        "y": 348,
+        "w": 47,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PinkRing": {
+        "x": 484,
+        "y": 78,
+        "w": 30,
+        "h": 30,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_OverviewConfirm": {
+        "x": 95,
+        "y": 456,
+        "w": 64,
+        "h": 35,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_ConfirmSkip": {
+        "x": 454,
+        "y": 122,
+        "w": 62,
+        "h": 36,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StorySkip_2": {
+        "x": 198,
+        "y": 500,
+        "w": 27,
+        "h": 16,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StorySkip_1": {
+        "x": 263,
+        "y": 381,
+        "w": 35,
+        "h": 33,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StorySkipExclamation_1": {
+        "x": 198,
+        "y": 0,
+        "w": 175,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_StorySkipExclamation_2": {
+        "x": 0,
+        "y": 0,
+        "w": 188,
+        "h": 30,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PressVAdjustTime_1": {
+        "x": 262,
+        "y": 40,
+        "w": 174,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_PressVAdjustTime_2": {
+        "x": 95,
+        "y": 170,
+        "w": 161,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_TimeSystem_1": {
+        "x": 383,
+        "y": 0,
+        "w": 121,
+        "h": 28,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_AdjustTimeConfirm_1": {
+        "x": 95,
+        "y": 247,
+        "w": 73,
+        "h": 40,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_AdjustTimeConfirm_2": {
+        "x": 313,
+        "y": 313,
+        "w": 52,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_AdjustTimeConfirm_3": {
+        "x": 198,
+        "y": 464,
+        "w": 52,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NextPage2": {
+        "x": 95,
+        "y": 381,
+        "w": 78,
+        "h": 30,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DeliveryComplete": {
+        "x": 95,
+        "y": 202,
+        "w": 93,
+        "h": 35,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NextPage1": {
+        "x": 198,
+        "y": 424,
+        "w": 56,
+        "h": 30,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NextPage": {
+        "x": 448,
+        "y": 278,
+        "w": 56,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GhostClickBlankClose3": {
+        "x": 313,
+        "y": 482,
+        "w": 50,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GhostClickBlankClose2": {
+        "x": 378,
+        "y": 348,
+        "w": 50,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GhostClickBlankClose1": {
+        "x": 426,
+        "y": 241,
+        "w": 80,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseGiftClaim4": {
+        "x": 95,
+        "y": 122,
+        "w": 109,
+        "h": 38,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseGiftClaim3": {
+        "x": 0,
+        "y": 488,
+        "w": 81,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseGiftClaim2": {
+        "x": 434,
+        "y": 202,
+        "w": 80,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CloseGiftClaim1": {
+        "x": 418,
+        "y": 170,
+        "w": 82,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_CharGiftClaim": {
+        "x": 446,
+        "y": 40,
+        "w": 61,
+        "h": 26,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_GiftClaim": {
+        "x": 334,
+        "y": 122,
+        "w": 110,
+        "h": 35,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NextPage4": {
+        "x": 95,
+        "y": 297,
+        "w": 88,
+        "h": 33,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_AdjustTimeConfirm_5": {
+        "x": 313,
+        "y": 414,
+        "w": 49,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_AdjustTimeConfirm_4": {
+        "x": 198,
+        "y": 381,
+        "w": 55,
+        "h": 33,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Forbid1": {
+        "x": 378,
+        "y": 416,
+        "w": 28,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Forbid2": {
+        "x": 260,
+        "y": 464,
+        "w": 31,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DialogEllipsis3": {
+        "x": 419,
+        "y": 381,
+        "w": 35,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DialogEllipsis2": {
+        "x": 264,
+        "y": 424,
+        "w": 33,
+        "h": 24,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_DialogEllipsis1": {
+        "x": 378,
+        "y": 449,
+        "w": 28,
+        "h": 22,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_Forbid3": {
+        "x": 378,
+        "y": 381,
+        "w": 31,
+        "h": 25,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_TimeSystem_2": {
+        "x": 234,
+        "y": 78,
+        "w": 122,
+        "h": 32,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    }
+}

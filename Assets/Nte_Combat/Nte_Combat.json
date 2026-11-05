@@ -1,0 +1,200 @@
+{
+    "Nte_MythicalMonster_L Nte_TransparentImage": {
+        "x": 61,
+        "y": 64,
+        "w": 10,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MythicalMonster_L": {
+        "x": 34,
+        "y": 63,
+        "w": 13,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MythicalMonster_V Nte_TransparentImage": {
+        "x": 84,
+        "y": 33,
+        "w": 12,
+        "h": 20,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MythicalMonster_V": {
+        "x": 61,
+        "y": 33,
+        "w": 13,
+        "h": 21,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MythicalMonster_LV Nte_TransparentImage": {
+        "x": 80,
+        "y": 0,
+        "w": 25,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_MythicalMonster_LV": {
+        "x": 0,
+        "y": 0,
+        "w": 30,
+        "h": 23,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_LegendaryMonster_L Nte_TransparentImage": {
+        "x": 61,
+        "y": 97,
+        "w": 10,
+        "h": 16,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_LegendaryMonster_L": {
+        "x": 106,
+        "y": 33,
+        "w": 12,
+        "h": 16,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_LegendaryMonster_V Nte_TransparentImage": {
+        "x": 102,
+        "y": 91,
+        "w": 10,
+        "h": 8,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_LegendaryMonster_V": {
+        "x": 102,
+        "y": 64,
+        "w": 11,
+        "h": 16,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NormalEnemy_L Nte_TransparentImage": {
+        "x": 81,
+        "y": 64,
+        "w": 11,
+        "h": 17,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NormalEnemy_L": {
+        "x": 34,
+        "y": 96,
+        "w": 14,
+        "h": 20,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NormalEnemy_V Nte_TransparentImage": {
+        "x": 81,
+        "y": 91,
+        "w": 11,
+        "h": 12,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NormalEnemy_V": {
+        "x": 34,
+        "y": 33,
+        "w": 17,
+        "h": 20,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NormalEnem_LV Nte_TransparentImage": {
+        "x": 0,
+        "y": 33,
+        "w": 24,
+        "h": 17,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_NormalEnem_LV": {
+        "x": 40,
+        "y": 0,
+        "w": 30,
+        "h": 20,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_LegendaryMonster_LV Nte_TransparentImage": {
+        "x": 0,
+        "y": 86,
+        "w": 22,
+        "h": 16,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    },
+    "Nte_LegendaryMonster_LV": {
+        "x": 0,
+        "y": 60,
+        "w": 23,
+        "h": 16,
+        "ox": 0,
+        "oy": 0,
+        "points": {
+            
+        }
+    }
+}
