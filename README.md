@@ -1,5 +1,5 @@
-# TrustNTE - 异环自动化辅助工具
-### TrustNTE - Automation Assistant for Neverness to Everness
+# TrustNTE解放双手 - 基于C# .NET8.0 MVVM架构编写的异环后台静默运行的自动化工具
+### 专为《异环》(Neverness to Everness) 打造的开源免费辅助工具
 
 > **让异环解放双手，把自由时间还给自己。**  
 > **Free your hands, reclaim your time.**
@@ -8,9 +8,19 @@
 
 ---
 
+## 📸 软件预览 / Screenshots
+
+<div align="center">
+  <img src="Assets/AboutTrustNTE/AboutTrustNTE1.png" alt="主界面预览" width="800"/>
+  <br/><br/>
+  <img src="Assets/AboutTrustNTE/AboutTrustNTE2.png" alt="功能设置预览" width="800"/>
+</div>
+
+---
+
 ## 🎮 中文介绍
 
-TrustNTE 是一款专为《异环》（Neverness to Everness）打造的开源、免费、无广告的自动化辅助工具。本项目基于 C# 和 OpenCV 编写，致力于通过底层视觉识别和输入注入，帮助玩家自动完成游戏中的日常、重复性任务，极大地提升游戏体验。
+TrustNTE 是一款专为《异环》（Neverness to Everness）打造的开源、免费、无广告的自动化辅助工具。本项目基于 C# .NET 8.0 和 MVVM 架构编写，致力于通过底层视觉识别和输入注入，帮助玩家后台静默完成游戏中的日常、重复性任务，极大地提升游戏体验。
 
 ### 🌟 核心特性
 - 🌍 **多语言支持**：内置简体中文、English、日本語、한국어 四国语言，无缝切换。
@@ -33,7 +43,7 @@ TrustNTE 是一款专为《异环》（Neverness to Everness）打造的开源�
 
 ## 🇬🇧 English Introduction
 
-TrustNTE is an open-source, free, and ad-free automation tool designed specifically for *Neverness to Everness*. Built with C# and OpenCV, it uses advanced computer vision and input injection to help players automate daily and repetitive tasks, greatly enhancing the gaming experience.
+TrustNTE is an open-source, free, and ad-free automation tool designed specifically for *Neverness to Everness*. Built with C# .NET 8.0 and MVVM architecture, it uses advanced computer vision and input injection to silently automate daily and repetitive tasks in the background, greatly enhancing the gaming experience.
 
 ### 🌟 Key Features
 - 🌍 **Multi-language Support**: Built-in Simplified Chinese, English, Japanese, and Korean. Switch seamlessly.
@@ -56,9 +66,9 @@ TrustNTE is an open-source, free, and ad-free automation tool designed specifica
 
 ## 🛠️ 技术栈 / Tech Stack
 - **UI**: WPF + Wpf.Ui (Fluent Design)
+- **Framework**: .NET 8.0 + MVVM (CommunityToolkit.Mvvm)
 - **Vision**: OpenCvSharp4, RapidOCR
 - **AI Model / 目标检测**: **YOLOv8** (Custom Trained / 深度定制训练)
-- **Architecture**: MVVM + Dependency Injection
 - **Input Driver**: Physical, Background, Trick injection (Anti-key-stuck built-in)
 
 ## ⚠️ 免责声明 / Disclaimer

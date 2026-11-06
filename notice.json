@@ -1,9 +1,7 @@
 {
-  "version": "0.0.10",
+  "version": "0.0.11",
   "gray": 100,
-  "release_note": "## 测试更新\n- 本次更新用于测试自动更新流程",
-  "download_url_template": "https://github.com/daoqi/MintNTE/releases/download/v{version}/TrustNTE_v{version}.zip",
-  "sha256": {
-    "0.0.11": "在这里填 TrustNTE_v0.0.11.zip 的 SHA256"
-  }
+  "release_note": "## 首个正式版发布\n- 支持自动更新\n- 新增每日奖励领取\n- 优化多分辨率适配",
+  "download_url_template": "https://github.com/TrustNTE/TrustNTE/releases/download/v{version}/TrustNTE-Update-v{version}.zip",
+  "sha256": {}
 }
