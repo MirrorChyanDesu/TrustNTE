@@ -17,7 +17,7 @@ namespace TrustNTE.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IConfigService _configService;
-        private const string NoticeUrl = "https://raw.githubusercontent.com/daoqi/MintNTE/main/notice.json";
+        private const string NoticeUrl = "https://raw.githubusercontent.com/TrustNTE/TrustNTE/main/notice.json";
 
         public UpdateService(IConfigService configService)
         {

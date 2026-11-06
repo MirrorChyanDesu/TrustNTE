@@ -13,8 +13,8 @@ namespace TrustNTE.Services.Implementations
     public class RedeemCodeService : IRedeemCodeService
     {
         private readonly HttpClient _httpClient;
-        // 文件名   改为 redeem-codes.json
-        private const string CodesJsonUrl = "https://raw.githubusercontent.com/daoqi/MintNTE/main/redeem-codes.json";
+        //  redeem-codes.json
+        private const string CodesJsonUrl = "https://raw.githubusercontent.com/TrustNTE/TrustNTE/main/redeem-codes.json";
         private static readonly JsonSerializerOptions _jsonOptions = new() { PropertyNameCaseInsensitive = true };
 
         public RedeemCodeService(HttpClient httpClient)
