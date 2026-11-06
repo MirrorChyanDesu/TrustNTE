@@ -1,0 +1,51 @@
+﻿<Window x:Class="TrustNTE.Update.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TrustNTE · 更新程序" Height="380" Width="480"
+        WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        Background="#1E1E1E" AllowsTransparency="True" BorderBrush="#3C3C3C" BorderThickness="1"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
+	<Grid>
+		<Grid VerticalAlignment="Top" Height="40" Background="#252526" Margin="1,1,1,0">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="15,0,0,0" VerticalAlignment="Center">
+				<Image Source="/Assets/titlelogo.png" Width="20" Height="20" Margin="0,0,8,0"/>
+				<TextBlock Text="TrustNTE · 更新程序" Foreground="LightGray" FontSize="12" VerticalAlignment="Center"/>
+			</StackPanel>
+
+			<Button x:Name="CloseBtn" Content="✕" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Background="Transparent" Foreground="Gray" BorderThickness="0" FontSize="12"
+                    Cursor="Hand" Click="CloseBtn_Click" Margin="0,0,15,0" Width="30" Height="30"/>
+		</Grid>
+
+		<Grid Margin="20,50,20,20">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<StackPanel Grid.Row="0" HorizontalAlignment="Center" Margin="0,10,0,20">
+				<TextBlock Text="TrustNTE" Foreground="White" FontSize="28" FontWeight="Light" HorizontalAlignment="Center"/>
+				<TextBlock Text="让异环解放双手" Foreground="LightGray" FontSize="16" Margin="0,5,0,0" HorizontalAlignment="Center"/>
+			</StackPanel>
+
+			<Grid Grid.Row="1">
+				<TextBlock x:Name="StatusText" Text="正在准备环境..." Foreground="White" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+
+				<StackPanel x:Name="SourcePanel" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed">
+					<TextBlock Text="选择安装源：" Foreground="Gray" Margin="0,0,0,10"/>
+					<RadioButton x:Name="RbGithub" Content="GitHub (开源渠道，国内可能较慢)" Foreground="LightGray" IsChecked="True" GroupName="Sources" Margin="0,5,0,5" Cursor="Hand"/>
+					<RadioButton x:Name="RbTencent" Content="腾讯云 COS (国内极速下载)" Foreground="LightGray" GroupName="Sources" Margin="0,5,0,5" Cursor="Hand"/>
+				</StackPanel>
+
+				<ProgressBar x:Name="DownloadProgress" Height="6" Minimum="0" Maximum="100" Value="0"
+                             Foreground="#58A6FF" Background="#323232" BorderThickness="0"
+                             VerticalAlignment="Bottom" Margin="0,0,0,10" Visibility="Collapsed"/>
+			</Grid>
+
+			<Button x:Name="ActionBtn" Content="更 新" Grid.Row="2" Width="100" Height="35"
+                    HorizontalAlignment="Right" Background="#58A6FF" Foreground="White"
+                    BorderThickness="0" FontSize="14" Cursor="Hand" Click="ActionBtn_Click"/>
+		</Grid>
+	</Grid>
+</Window>

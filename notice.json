@@ -1,7 +1,10 @@
 {
   "version": "0.0.11",
   "gray": 100,
-  "release_note": "## 首个正式版发布\n- 支持自动更新\n- 新增每日奖励领取\n- 优化多分辨率适配",
-  "download_url_template": "https://github.com/TrustNTE/TrustNTE/releases/download/v{version}/TrustNTE-Update-v{version}.zip",
+  "release_note": "## 测试更新\n- 测试双源下载",
+  "download_urls": {
+    "github": "https://github.com/TrustNTE/TrustNTE/releases/download/v{version}/TrustNTE-Update-v{version}.zip",
+    "tencent": "https://trustnte-updates-1526977214.cos.ap-guangzhou.myqcloud.com/TrustNTE-Update-v{version}.zip"
+  },
   "sha256": {}
 }
