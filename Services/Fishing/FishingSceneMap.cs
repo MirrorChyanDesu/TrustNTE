@@ -56,7 +56,7 @@ namespace TrustNTE.Services.Fishing
         public const int ChangeBaitBuyClickX = 751, ChangeBaitBuyClickY = 706;
 
         // ── 魔法数字收口 ──
-        public const int CastCooldownMs = 400;
+        public const int CastCooldownMs = 1000; 
         public const int InteractCooldownMs = 400;
         public const int ControlFrameDelayMs = 30;
         public const int IdleFrameDelayMs = 50;

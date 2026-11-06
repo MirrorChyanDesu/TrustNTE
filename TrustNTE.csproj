@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<!-- 把调试信息嵌入 exe，避免发布时产生一堆 .pdb -->
+		<DebugType>embedded</DebugType>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows10.0.22621.0</TargetFramework>
 		<Nullable>enable</Nullable>
@@ -11,90 +13,88 @@
 		<PlatformTarget>x64</PlatformTarget>
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<Version>0.0.10</Version>
-		<NoWarn>$(NoWarn);CA1416</NoWarn>
+		<NoWarn>$(NoWarn);CA1416;NU1605</NoWarn>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<ApplicationManifest>TrustNTE.manifest</ApplicationManifest>
 		<ApplicationIcon>Assets\titlelogo.ico</ApplicationIcon>
-
-		<ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
 	</PropertyGroup>
 
+	<!-- 排除不需要编译的子项目 -->
 	<ItemGroup>
 		<Compile Remove="TrustNTE.update\**\*.cs" />
 		<EmbeddedResource Remove="TrustNTE.update\**\*" />
 		<None Remove="TrustNTE.update\**\*" />
-		<!--     加入这三行，彻底把测试项目赶出主项目 -->
 		<Compile Remove="TrustNTE.Tests\**\*.cs" />
 		<EmbeddedResource Remove="TrustNTE.Tests\**\*" />
 		<None Remove="TrustNTE.Tests\**\*" />
 	</ItemGroup>
 
+	<!-- 外部资源拷贝（给 OpenCV 读取用） -->
 	<ItemGroup>
-		<!-- Yolo模型文件 -->
 		<None Update="Assets\NTE-CombatYOLO\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-
-		<!--  UID 图集 -->
 		<None Update="Assets\Nte_Uid\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-
-		<!--  登录界面图集 -->
 		<None Update="Assets\Nte_login_screen\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-
-		<!--  启动器图集 -->
 		<None Update="Assets\Nte_Launcher\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-
-		<!-- Nte_Data 图集 -->
 		<None Update="Assets\Nte_Data\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-
-		<!-- 模型文件被复制到 bin 目录 -->
 		<None Update="Assets\NTE-Ocr_Models\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 
-		<!--模板图被复制到 bin 目录，允许 OpenCV 读取 -->
-		<Content Include="Views\Pages\TaskModules\Assets\**\*.png">
+		<!-- 大牛说的坑：用 None 替代 Content，防止单文件模式找图崩溃。现在虽然没用单文件，但这样写最稳 -->
+		<None Include="Views\Pages\TaskModules\Assets\**\*.png">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-		<Content Include="Views\Pages\TaskModules\Assets\*.bmp">
+		</None>
+		<None Include="Views\Pages\TaskModules\Assets\*.bmp">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
+		</None>
+		<None Include="Services\Triggers\Assets\*.bmp">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 
-		<!-- 确保触发器 UI 模板图被复制到 bin 目录 -->
-		<Content Include="Services\Triggers\Assets\*.bmp">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
-
-		<!-- 翻译文件复制 -->
 		<None Update="Assets\Translations\*.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 
-		<!--  强制复制 Docs 目录下的所有文件 -->
+		<!-- 强制拷贝 Docs 和所有 Assets 里的外部文件（用 Content 保证绝对拷过去） -->
 		<None Remove="Assets\Docs\**\*.*" />
 		<Content Include="Assets\Docs\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
-
-
-		<!-- Assets 目录下的所有资源都复制到输出目录 -->
-		<None Update="Assets\**\*.*">
+		<Content Include="Assets\**\*.*">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-
-
+		</Content>
 	</ItemGroup>
+
 	<ItemGroup>
-		<!-- Assets Psd文件不复制 里面全是图集源码 可以自己编辑 -->
 		<None Remove="Assets\Psd\**\*.*" />
+	</ItemGroup>
+
+	<!-- UI 界面资源嵌入（确保 WPF 界面图标不丢失） -->
+	<ItemGroup>
+		<Resource Include="Assets\*.png" />
+		<Resource Include="Assets\*.jpg" />
+		<Resource Include="Assets\*.jpeg" />
+		<Resource Include="Assets\*.gif" />
+		<Resource Include="Assets\*.ico" />
+
+		<Resource Include="Views\**\*.png" />
+		<Resource Include="Views\**\*.jpg" />
+		<Resource Include="Views\**\*.jpeg" />
+		<Resource Include="Views\**\*.bmp" />
+		<Resource Include="Views\**\*.gif" />
+		<Resource Include="Views\**\*.ico" />
+
+		<Resource Include="Services\Triggers\Assets\*.bmp" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -116,43 +116,20 @@
 		<PackageReference Include="Sdcb.OpenVINO.runtime.win-x64" Version="2026.2.0" />
 		<PackageReference Include="WPF-UI" Version="4.3.0" />
 		<PackageReference Include="WPF-UI.DependencyInjection" Version="4.3.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="WPF-UI.Tray" Version="4.3.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 	</ItemGroup>
 
+	<PropertyGroup>
+		<PublishSingleFile>false</PublishSingleFile>
+	</PropertyGroup>
 
-
-	<!-- WPF 界面资源文件编译 -->
-	<ItemGroup>
-		<Resource Include="Assets\TrustNTE.png" />
-		<Resource Include="Assets\TrustNTE1.png" />
-		<Resource Include="Assets\TrustNTE2.png" />
-		<Resource Include="Assets\TrustNTE3.png" />
-		<Resource Include="Assets\icon_api.png" />
-		<Resource Include="Assets\titlelogo.ico" />
-
-		<Resource Include="Views\Pages\TaskModules\Assets\**\*.png" />
-		<Resource Include="Views\Pages\TaskModules\Assets\**\*.jpg" />
-		<Resource Include="Views\Pages\TaskModules\Assets\**\*.jpeg" />
-		<Resource Include="Views\Pages\TaskModules\Assets\**\*.bmp" />
-		<Resource Include="Views\Pages\TaskModules\Assets\**\*.gif" />
-		<Resource Include="Views\Pages\TaskModules\Assets\**\*.ico" />
-
-		<Resource Include="Views\Windows\Assets\**\*.png" />
-		<Resource Include="Views\Windows\Assets\**\*.jpg" />
-		<Resource Include="Views\Windows\Assets\**\*.jpeg" />
-		<Resource Include="Views\Windows\Assets\**\*.bmp" />
-		<Resource Include="Views\Windows\Assets\**\*.gif" />
-		<Resource Include="Views\Windows\Assets\**\*.ico" />
-	</ItemGroup>
-
-	<Target Name="BuildAndCopyUpdater" AfterTargets="Build" Condition="Exists('$(MSBuildThisFileDirectory)TrustNTE.update\TrustNTE.update.csproj')">
-		<MSBuild Projects="$(MSBuildThisFileDirectory)TrustNTE.update\TrustNTE.update.csproj" Targets="Build" Properties="Configuration=$(Configuration);Platform=x64" />
+	<Target Name="BuildAndCopyUpdater" AfterTargets="Publish" Condition="Exists('$(MSBuildThisFileDirectory)TrustNTE.update\TrustNTE.update.csproj')">
+		<MSBuild Projects="$(MSBuildThisFileDirectory)TrustNTE.update\TrustNTE.update.csproj" Targets="Publish" Properties="Configuration=$(Configuration);Platform=x64;RuntimeIdentifier=win-x64;SelfContained=true;PublishSingleFile=true;EnableCompressionInSingleFile=true;PublishDir=$(MSBuildThisFileDirectory)TrustNTE.update\publish\" />
 		<ItemGroup>
-
-			<UpdaterOutput Include="$(MSBuildThisFileDirectory)TrustNTE.update\bin\x64\$(Configuration)\net8.0-windows10.0.22621.0\TrustNTE.update.*" />
+			<UpdaterFiles Include="$(MSBuildThisFileDirectory)TrustNTE.update\publish\**\*.*" Exclude="$(MSBuildThisFileDirectory)TrustNTE.update\publish\**\*.pdb" />
 		</ItemGroup>
-		<Copy SourceFiles="@(UpdaterOutput)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="true" />
+		<Copy SourceFiles="@(UpdaterFiles)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
 	</Target>
 
 </Project>

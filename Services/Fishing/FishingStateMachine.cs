@@ -33,7 +33,6 @@ namespace TrustNTE.Services.Fishing
         private DateTime _lastBarSeenTime = DateTime.Now;
         private DateTime _recoverLastEsc = DateTime.MinValue;
 
-        //       把 miss 计数收回状态机
         private const int BarMissTolerance = 5;
         private int _barMissCount = 0;
 
@@ -46,8 +45,8 @@ namespace TrustNTE.Services.Fishing
         private bool _recoverFlowLogged = false;
         private int _recoverEscCount = 0;
         private bool _hasCountedCurrentResult = false;
+        private DateTime _lastFishCaughtTime = DateTime.MinValue;
 
-        //       归一化日志 Tag
         private string Tag => FishingLogTag.Of(_router);
 
         public FishingStateMachine(
@@ -81,6 +80,7 @@ namespace TrustNTE.Services.Fishing
             _recoverEscCount = 0;
             _recoverLastEsc = DateTime.MinValue;
             _hasCountedCurrentResult = false;
+            _lastFishCaughtTime = DateTime.MinValue;
             _stateEnterTime = DateTime.Now;
             _lastBarSeenTime = DateTime.Now;
             _barMissCount = 0;
@@ -89,7 +89,6 @@ namespace TrustNTE.Services.Fishing
 
         public void Teardown() => _barController.Release();
 
-        //       引擎不再传 snap 和 missCount，状态机自己管
         public async Task<int> ProcessFrameAsync(Mat frame, FishingRoiAnalyzer.ColorRectResult barA, FishingRoiAnalyzer.ColorRectResult barB, CancellationToken token)
         {
             FishingState realTimeState = _currentState;
@@ -97,7 +96,6 @@ namespace TrustNTE.Services.Fishing
 
             if (IsChainState(_currentState))
             {
-                // 链进行中：挂起钓鱼UI识别（防止商店界面误命中钓鱼模板抢状态）
             }
             else if (barA.Rect.HasValue && barB.Rect.HasValue)
             {
@@ -108,9 +106,11 @@ namespace TrustNTE.Services.Fishing
             else
             {
                 _barMissCount++;
-                if (_barMissCount > BarMissTolerance || _currentState != FishingState.Control)
+                bool isControlGracePeriod = _currentState == FishingState.Control
+                    && (DateTime.Now - _stateEnterTime).TotalMilliseconds < 2500;
+
+                if ((_barMissCount > BarMissTolerance || _currentState != FishingState.Control) && !isControlGracePeriod)
                 {
-                    //       门控通过，再调识别器
                     snap = _recognizer.AnalyzeScene(frame, barA, barB);
 
                     if (snap.OverflowToast && _soldFishOk)
@@ -144,9 +144,7 @@ namespace TrustNTE.Services.Fishing
             }
 
             if (realTimeState != _currentState) SwitchState(realTimeState);
-
             await ExecuteStateAsync(frame, barA, barB, token);
-
             return _currentState == FishingState.Control ? FishingSceneMap.ControlFrameDelayMs : FishingSceneMap.IdleFrameDelayMs;
         }
 
@@ -184,7 +182,7 @@ namespace TrustNTE.Services.Fishing
 
             _currentState = newState;
             _stateEnterTime = DateTime.Now;
-            _barMissCount = 0; //       切状态归零
+            _barMissCount = 0;
 
             switch (newState)
             {
@@ -198,8 +196,6 @@ namespace TrustNTE.Services.Fishing
         private static bool IsChainState(FishingState s) =>
             s is FishingState.SellFish or FishingState.SellCabin or FishingState.SellConfirm or FishingState.SellSuccessWait or FishingState.RecoverFishing
             or FishingState.BuySelectBait or FishingState.BuySelectMax or FishingState.BuyExecute or FishingState.BuyPromptWait or FishingState.BuyItemWait or FishingState.BuyExitShop or FishingState.EquipPanel;
-
-        // ══════════ Do 方法 ══════════
 
         private async Task DoInteract(CancellationToken token, int delay)
         {
@@ -258,10 +254,23 @@ namespace TrustNTE.Services.Fishing
         private async Task DoResult(Mat frame, CancellationToken token, int delay)
         {
             bool foundFish = false;
+            bool isTooSoon = (DateTime.Now - _lastFishCaughtTime).TotalSeconds < 3.0;
 
-            if (_templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishS) != null) { if (!_hasCountedCurrentResult) { _logService.LogInfo($"{Tag} 成功钓到 S级 鱼！"); _config.SCount++; _hasCountedCurrentResult = true; } foundFish = true; }
-            else if (_templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishA) != null) { if (!_hasCountedCurrentResult) { _logService.LogInfo($"{Tag} 成功钓到 A级 鱼！"); _config.ACount++; _hasCountedCurrentResult = true; } foundFish = true; }
-            else if (_templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishB) != null) { if (!_hasCountedCurrentResult) { _logService.LogInfo($"{Tag} 成功钓到 B级 鱼！"); _config.BCount++; _hasCountedCurrentResult = true; } foundFish = true; }
+            if (_templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishS) != null)
+            {
+                if (!_hasCountedCurrentResult && !isTooSoon) { _logService.LogInfo($"{Tag} 成功钓到 S级 鱼！"); _config.SCount++; _hasCountedCurrentResult = true; _lastFishCaughtTime = DateTime.Now; }
+                foundFish = true;
+            }
+            else if (_templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishA) != null)
+            {
+                if (!_hasCountedCurrentResult && !isTooSoon) { _logService.LogInfo($"{Tag} 成功钓到 A级 鱼！"); _config.ACount++; _hasCountedCurrentResult = true; _lastFishCaughtTime = DateTime.Now; }
+                foundFish = true;
+            }
+            else if (_templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishB) != null)
+            {
+                if (!_hasCountedCurrentResult && !isTooSoon) { _logService.LogInfo($"{Tag} 成功钓到 B级 鱼！"); _config.BCount++; _hasCountedCurrentResult = true; _lastFishCaughtTime = DateTime.Now; }
+                foundFish = true;
+            }
 
             if (foundFish || (DateTime.Now - _stateEnterTime).TotalSeconds > 4)
             {
@@ -302,7 +311,16 @@ namespace TrustNTE.Services.Fishing
 
         private async Task DoRecoverFishing(Mat frame, CancellationToken token)
         {
-            bool hudVisible = _templateService.MatchAny(frame, FishingSceneMap.CastRodRect1, FishingSceneMap.TplCastRod) != null || _templateService.MatchAny(frame, FishingSceneMap.CastRodRect2, FishingSceneMap.TplCastRod) != null || _templateService.MatchAny(frame, FishingSceneMap.StartRect, FishingSceneMap.TplStartFishing) != null || _templateService.MatchAny(frame, FishingSceneMap.InteractRect, FishingSceneMap.TplFishingInteract) != null || _templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishS) != null || _templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishA) != null || _templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishB) != null;
+            // ★ 修复：多尺度匹配气泡 + 粉色检测兜底
+            bool hudVisible = _templateService.MatchAny(frame, FishingSceneMap.CastRodRect1, FishingSceneMap.TplCastRod) != null ||
+                              _templateService.MatchAny(frame, FishingSceneMap.CastRodRect2, FishingSceneMap.TplCastRod) != null ||
+                              _templateService.MatchAny(frame, FishingSceneMap.StartRect, FishingSceneMap.TplStartFishing) != null ||
+                              _templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishS) != null ||
+                              _templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishA) != null ||
+                              _templateService.MatchAny(frame, FishingSceneMap.FishResultRect, FishingSceneMap.TplFishB) != null ||
+                              _templateService.MatchAnyMultiScale(frame, FishingSceneMap.InteractRect, FishingSceneMap.TplFishingInteract) != null ||
+                              _recognizer.CheckPinkBubble(frame, FishingSceneMap.InteractRect);
+
             if (hudVisible) { _logService.LogInfo($"{Tag} 已回到钓鱼界面"); SwitchState(FishingState.Observing); return; }
             if (!_recoverFlowLogged && _templateService.MatchAny(frame, FishingSceneMap.ReturnFlowRect, FishingSceneMap.TplReturnFlow) != null) { _recoverFlowLogged = true; _logService.LogInfo($"{Tag} 还在仓库前往钓鱼"); }
             if (_recoverEscCount < 6 && (DateTime.Now - _recoverLastEsc).TotalMilliseconds > 1500) { _recoverEscCount++; _recoverLastEsc = DateTime.Now; _logService.LogInfo($"{Tag} 第{_recoverEscCount}/6次ESC尝试返回钓鱼界面"); _router.KeyPress(_automationService.CurrentHwnd, KeyCode.Esc, 50); await Task.Delay(500, token); return; }

@@ -41,6 +41,9 @@ namespace TrustNTE.ViewModels.Pages
         [ObservableProperty] private string _gamePath = string.Empty;
         [ObservableProperty] private string _triggerInterval = "50";
 
+        // 定时刷日志的 Timer
+        private readonly System.Threading.Timer _logFlushTimer;
+
         public StartPageViewModel(
             AutomationService automationService,
             IConfigService configService,
@@ -114,40 +117,42 @@ namespace TrustNTE.ViewModels.Pages
             InitializeFpsTimer();
             InitializeApi();
             InitializeOcr();
+
+            // 启动后台定时器，每 200 毫秒强制检查并刷新一次日志
+            _logFlushTimer = new System.Threading.Timer(_ => FlushLogs(), null, 200, 200);
         }
 
         private void OnConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(AppConfig.GamePath))
+            // 统一异步派发，消除"UI 阻塞等退出时回调死锁"整类隐患
+            _dispatcherService.BeginInvoke(() =>
             {
-                _dispatcherService.Invoke(() =>
-                {
-                    if (GamePath != _config.GamePath) GamePath = _config.GamePath;
-                });
-            }
+                if (GamePath != _config.GamePath) GamePath = _config.GamePath;
+            });
         }
 
         private readonly List<string> _pendingLogs = new();
         private readonly object _pendingLock = new();
-        private DateTime _lastLogFlush = DateTime.MinValue;
 
         private void AppendLog(string message)
         {
+            // 只管接收，立刻返回。不占用后台线程时间，也不会卡队列
             lock (_pendingLock) _pendingLogs.Add(message);
+        }
 
-            // UI 每 200ms 合并刷新一次 如果一条条刷新会导致UI卡顿影响极大
-            if ((DateTime.UtcNow - _lastLogFlush).TotalMilliseconds < 200) return;
-            _lastLogFlush = DateTime.UtcNow;
+        // 由定时器驱动，主动去拉取积压的日志并推送到 UI
+        private void FlushLogs()
+        {
+            string[] batch;
+            lock (_pendingLock)
+            {
+                if (_pendingLogs.Count == 0) return;
+                batch = _pendingLogs.ToArray();
+                _pendingLogs.Clear();
+            }
 
             _dispatcherService.BeginInvoke(() =>
             {
-                string[] batch;
-                lock (_pendingLock)
-                {
-                    batch = _pendingLogs.ToArray();
-                    _pendingLogs.Clear();
-                }
-
                 foreach (var line in batch)
                 {
                     Logs.Add(line);
@@ -159,7 +164,12 @@ namespace TrustNTE.ViewModels.Pages
 
         private void UpdateRunningState(bool isRunning)
         {
-            _dispatcherService.Invoke(() =>
+            // [改·退出生死线] Invoke → BeginInvoke：
+            // 程序退出时 UI 线程阻塞在 autoService.WaitForExit() 上，
+            // 引擎 finally 会触发本回调；若是同步 Invoke，回调在 UI 队列里
+            // 等 UI 空闲、UI 在等 WaitForExit —— 互相等，白卡到 3 秒超时。
+            // BeginInvoke 排队即返回，不阻塞引擎收尾线程。
+            _dispatcherService.BeginInvoke(() =>
             {
                 IsRunning = isRunning;
                 StartButtonText = isRunning ? TranslationService.Instance["停止"] : TranslationService.Instance["启动"];
@@ -169,6 +179,7 @@ namespace TrustNTE.ViewModels.Pages
 
             if (!isRunning)
             {
+                // 停止时强制把队列里最后残留的日志全部推送到 UI
                 _dispatcherService.BeginInvoke(() =>
                 {
                     lock (_pendingLock)
@@ -186,7 +197,8 @@ namespace TrustNTE.ViewModels.Pages
                     }
                 });
 
-                _dispatcherService.Invoke(() =>
+                // BeginInvoke：CloseAllWindows 也在退出路径上，同样不能同步等 UI
+                _dispatcherService.BeginInvoke(() =>
                 {
                     ScreenSource = null;
                     _frameCount = 0;
@@ -198,7 +210,8 @@ namespace TrustNTE.ViewModels.Pages
 
         private void HandleWindowBound()
         {
-            _dispatcherService.Invoke(() =>
+            // BeginInvoke：与全局统一异步派发
+            _dispatcherService.BeginInvoke(() =>
             {
                 if (IsRunning && !_isMaskShowing)
                 {
@@ -237,6 +250,10 @@ namespace TrustNTE.ViewModels.Pages
             _automationService.OnFrameCaptured -= UpdateScreenSource;
             _automationService.OnWindowBound -= HandleWindowBound;
             _config.PropertyChanged -= OnConfigPropertyChanged;
+
+            // 销毁定时器
+            _logFlushTimer?.Dispose();
+
             DisposeCapture();
             DisposeCarousel();
         }

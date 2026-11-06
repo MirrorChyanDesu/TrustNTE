@@ -31,6 +31,7 @@ namespace TrustNTE
         public static IServiceProvider ServiceProvider { get; private set; } = null!;
 
         // 区分 --start 和 --auto 的属性
+        private static readonly HashSet<string> _loggedCrashKeys = new();
         public static bool IsAutoStartCommand { get; private set; } = false;  // --auto 或 --start：静默后台
         public static bool IsAutoStartEngine { get; private set; } = false;   // 仅 --start：静默并自动开启引擎
 
@@ -38,6 +39,9 @@ namespace TrustNTE
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            try { System.IO.Directory.CreateDirectory(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs")); } catch { }
+
+
             _mutex = new Mutex(true, @"Local\TrustNTE_SingleInstance", out bool createdNew);
             if (!createdNew)
             {
@@ -74,13 +78,26 @@ namespace TrustNTE
 
             this.DispatcherUnhandledException += (s, args) =>
             {
-                if (args.Exception is TaskCanceledException || args.Exception is OperationCanceledException)
+                try
                 {
+                    if (args.Exception is TaskCanceledException || args.Exception is OperationCanceledException)
+                    { args.Handled = true; return; }
+
+                    string key = args.Exception.GetType().Name + "|" +
+                                 (args.Exception.InnerException?.Message ?? args.Exception.Message);
+
+                    // 只有第一次出现该异常时才写日志
+                    if (_loggedCrashKeys.Add(key))
+                    {
+                        string logDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Logs");
+                        System.IO.Directory.CreateDirectory(logDir);
+                        System.IO.File.AppendAllText(
+                            System.IO.Path.Combine(logDir, "ui_crash.log"),
+                            $"[{DateTime.Now:HH:mm:ss}] {args.Exception}\n---\n");
+                    }
                     args.Handled = true;
-                    return;
                 }
-                System.Windows.MessageBox.Show($"发生严重错误：\n{args.Exception.Message}", "系统提示", MessageBoxButton.OK, MessageBoxImage.Error);
-                args.Handled = true;
+                catch { args.Handled = true; }
             };
 
             try
@@ -261,29 +278,40 @@ namespace TrustNTE
         {
             try
             {
-                // ① 用户级任务先停
+                var autoService = ServiceProvider?.GetService<AutomationService>();
+
+                // ① 幽灵守护收尸：IdleGuard + 引擎 + 派发器，一次性全发停止信号
+                //    （_idleGuardCts 从创建起无人取消，只有这里能杀掉守护线程）
+                autoService?.ShutdownForExit();
+
+                // ② 任务先停（在引擎停止信号前，避免收尾期又被拉起）
                 Task.Run(() => TaskRuntimeRegistry.StopAllAsync(TimeSpan.FromSeconds(2))).Wait(TimeSpan.FromSeconds(2.5));
 
-                // ② 引擎 / 调度器 / API 发停止信号
-                var autoService = ServiceProvider?.GetService<AutomationService>();
-                autoService?.Stop();
-
+                // ③ 其余组件发停止信号
                 var taskRunner = ServiceProvider?.GetService<DispatcherTaskRunner>();
                 taskRunner?.Stop();
 
                 var apiService = ServiceProvider?.GetService<LocalApiService>();
                 apiService?.Stop();
 
-                // ③ 等引擎主循环真正退出
-                autoService?.WaitForExit(2500);
+                // ④ 引擎停止信号（幂等：ShutdownForExit 已 Cancel 过，这里显式表达语义）
+                autoService?.Stop();
 
-                // ④ 兜底：抬起所有按住的键
+                // ⑤ [退出生死线] 等引擎 finally 真正跑完再退。
+                //    finally 顺序：StopCapture → 等业务闲 → ReleaseAllHeldKeys → ...
+                //    没有这一行，进程死在等待窗口内，keyup 永远不会发出——
+                //    游戏角色会按着方向键走到天涯海角。
+                autoService?.WaitForExit(3000);
+
+                // ⑥ 兜底：抬起所有按住的键（双保险，即使 ⑤ 超时也再抬一次）
                 ServiceProvider?.GetService<IInputRouter>()?.ReleaseAllHeldKeys(IntPtr.Zero);
             }
             catch (Exception ex) { System.Diagnostics.Debug.WriteLine($"[退出异常] {ex.Message}"); }
 
             if (ServiceProvider?.GetService<ILogService>() is LogService logService) logService.Flush();
 
+            // 容器 Dispose 会连带 Dispose 所有 singleton（含 StartPageViewModel：
+            // 退订日志事件 + 销毁日志刷新 timer）
             if (ServiceProvider is IDisposable disposable) disposable.Dispose();
 
             if (_mutex != null)

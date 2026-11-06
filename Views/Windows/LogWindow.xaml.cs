@@ -35,8 +35,12 @@ namespace TrustNTE.Views
 
         protected override void OnClosed(EventArgs e)
         {
+            //清理所有包含正在执行的进程
             _viewModel.Dispose();
+            // 无论从哪里 new 出来的日志窗口，关闭时都强行交还焦点
+            (Owner ?? Application.Current.MainWindow)?.Activate();
             base.OnClosed(e);
         }
+
     }
 }

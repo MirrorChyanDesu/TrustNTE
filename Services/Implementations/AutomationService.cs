@@ -80,6 +80,22 @@ namespace TrustNTE.Services
         private readonly YoloModelProvider _yoloProvider;
         private Mat? _latestFrame;
         private readonly object _frameLock = new();
+
+
+        // ================================================================
+        // 实时追踪游戏窗口尺寸和DPI缩放的变化
+        // ================================================================
+
+        // 记录上一帧的窗口客户区宽度和高度。用于和当前帧对比，判断窗口是否被拉伸或改变。
+        private int _lastTrackedW, _lastTrackedH;
+
+        // 记录上一帧的窗口 DPI 缩放比例（1.0 = 100%）。用于跨不同缩放率的显示器拖拽时，判断 DPI 是否改变。
+        private double _lastTrackedDpi = 1.0;
+
+        // 记录上一次【打印窗口变化日志】的时间。
+        // 作用：日志防抖节流。如果用户按住窗口边框疯狂拖拽，尺寸会一直变，
+        // 限制至少间隔 1000 毫秒才允许打印一次日志，防止日志瞬间刷屏卡死 UI。
+        private DateTime _lastResizeLogAt = DateTime.MinValue;
         private int _isBizRunning = 0;
         private int _isUiRunning = 0;
         private int _isCombatDebugRunning = 0;
@@ -258,6 +274,13 @@ namespace TrustNTE.Services
             _dispatchCts?.Cancel();
         }
 
+        // 专门用于程序彻底退出时的清理，连幽灵守护线程一起杀
+        public void ShutdownForExit()
+        {
+            try { _idleGuardCts.Cancel(); } catch { }
+            try { _cts?.Cancel(); } catch { }
+            try { _dispatchCts?.Cancel(); } catch { }
+        }
         public void WaitForExit(int timeoutMs)
         {
             var t = _workflowTask;
@@ -286,7 +309,7 @@ namespace TrustNTE.Services
                     if (!_configService.Load().IdleGuardEnabled) continue;
 
                     if (IsEngineRunning || TaskRuntimeRegistry.Count > 0) continue;
-                    // [停止后幽灵点击]  30 秒内手动 Start/Stop 过 → 守护静默。
+                    // 30 秒内手动 Start/Stop 过 → 守护静默。
                     // 否则用户刚点停止、引擎收尾完成，IdleGuard 1 秒内接管巡检，
                     // 看到进入游戏/重连按钮就动真鼠标——"我都叫停了它还在点"。
                     // 复用 ShouldAbortRestart 同款 30 秒约定。
@@ -315,6 +338,12 @@ namespace TrustNTE.Services
                     finally { _captureGate.Release(); }
 
                     if (frame == null || frame.Empty()) continue;
+                    // ↓ 新增：与主循环同款归一化，IdleGuard 的 1080P ROI/模板才能工作
+                    if (Win32Input.GetClientRect(hwnd, out var crc) && crc.Right > crc.Left)
+                        _nteRenderCtx.UpdateNteContext(crc.Right - crc.Left, crc.Bottom - crc.Top);
+                    var synced = _nteRenderCtx.SyncNteRenderFrame(frame);
+                    frame.Dispose();
+                    frame = synced;
                     try { await _supervisor.InspectIdleFrameAsync(frame, hwnd, cfg, token); }
                     finally { frame.Dispose(); }
                 }
@@ -353,14 +382,15 @@ namespace TrustNTE.Services
             _heartbeatBaseFrames = 0;
             _everBoundGame = true; // 已真正绑定游戏窗口，此后游戏消失才允许守护判定为崩溃
             _logService.Log("成功绑定异环窗口句柄");
-
-            if (Win32Input.GetClientRect(hwnd, out var rc))
+            if (Win32Input.GetClientRect(hwnd, out var initialRc))
             {
-                int w = rc.Right - rc.Left, h = rc.Bottom - rc.Top;
-                double dpi = Win32Input.GetDpiForWindow(hwnd) / 96.0;
-                _logService.LogInfo($"[NteCore] 已绑定渲染窗口 0x{hwnd.ToInt64():X} | 视口尺寸: {w}x{h} | 缩放DPI: {dpi:F2}");
-
+                _lastTrackedW = initialRc.Right - initialRc.Left;
+                _lastTrackedH = initialRc.Bottom - initialRc.Top;
+                _lastTrackedDpi = Win32Input.GetDpiForWindow(hwnd) / 96.0;
+                _logService.LogInfo($"[NteCore] 已绑定渲染窗口 0x{hwnd.ToInt64():X} | 视口尺寸: {_lastTrackedW}x{_lastTrackedH} | 缩放DPI: {_lastTrackedDpi:F2}");
             }
+
+            
             LogClickModeIfChanged(config.MouseDriveType);
 
             Application.Current?.Dispatcher.Invoke(() => OnWindowBound?.Invoke());
@@ -383,8 +413,17 @@ namespace TrustNTE.Services
                     if (newHwnd is IntPtr nh)
                     {
                         CurrentHwnd = nh;
-                        //  局部变量同步：主循环里 InspectGameFrameAsync 传的还是旧句柄 必须传入新的句柄 防止旧句柄死亡失效
                         hwnd = nh;
+
+                        // 崩溃重启后重新绑定并打印参数
+                        if (Win32Input.GetClientRect(nh, out var rrc))
+                        {
+                            _lastTrackedW = rrc.Right - rrc.Left;
+                            _lastTrackedH = rrc.Bottom - rrc.Top;
+                            _lastTrackedDpi = Win32Input.GetDpiForWindow(nh) / 96.0;
+                            _logService.LogInfo($"[NteCore] 崩溃重启，重新绑定 0x{nh.ToInt64():X} | 视口 {_lastTrackedW}x{_lastTrackedH} | DPI {_lastTrackedDpi:F2}");
+                        }
+
                         int restartInterval = int.TryParse(cfgNow.TriggerInterval, out int rMs) ? Math.Clamp(rMs, 10, 2000) : 50;
                         _gameService.StartCapture(nh, cfgNow.CaptureMode, restartInterval);
 
@@ -430,10 +469,40 @@ namespace TrustNTE.Services
                         Mat processMat = mat.Clone();
                         try
                         {
+                            // 实时追踪窗口尺寸和 DPI，并同步给归一化上下文
                             if (Win32Input.GetClientRect(CurrentHwnd, out var crc) && crc.Right > crc.Left)
-                                _nteRenderCtx.UpdateNteContext(crc.Right - crc.Left, crc.Bottom - crc.Top);
+                            {
+                                int w = crc.Right - crc.Left;
+                                int h = crc.Bottom - crc.Top;
+                                double dpi = Win32Input.GetDpiForWindow(CurrentHwnd) / 96.0;
+
+                                bool changed = w != _lastTrackedW || h != _lastTrackedH || Math.Abs(dpi - _lastTrackedDpi) > 0.01;
+                                if (changed)
+                                {
+                                    if (_lastTrackedW > 0 && (DateTime.Now - _lastResizeLogAt).TotalMilliseconds > 1000)
+                                    {
+                                        _logService.LogInfo($"[NteCore] 检测到窗口变化: 视口 {_lastTrackedW}x{_lastTrackedH} → {w}x{h} | DPI {_lastTrackedDpi:F2} → {dpi:F2} | 归一化系数已实时同步");
+                                        _lastResizeLogAt = DateTime.Now;
+
+                                        // 16:9 警告
+                                        double aspect = (double)w / h;
+                                        if (Math.Abs(aspect - 16.0 / 9.0) > 0.05)
+                                        {
+                                            _logService.LogWarning($"[NteCore] 当前视口 {w}x{h} 宽高比偏离 16:9，模板匹配可能失准，建议恢复 16:9 分辨率！");
+                                        }
+                                    }
+                                    _lastTrackedW = w;
+                                    _lastTrackedH = h;
+                                    _lastTrackedDpi = dpi;
+                                }
+
+                                // 必须每帧更新，不能放进 changed 里，确保归一化系数绝对实时
+                                _nteRenderCtx.UpdateNteContext(w, h);
+                            }
                             else
+                            {
                                 _nteRenderCtx.UpdateNteContext(processMat.Width, processMat.Height);
+                            }
 
                             Mat syncedMat = _nteRenderCtx.SyncNteRenderFrame(processMat);
                             processMat.Dispose();
@@ -484,7 +553,7 @@ namespace TrustNTE.Services
                         finally { processMat.Dispose(); }
                     }
                 }
-                catch (OperationCanceledException) { throw; } // [A9] 手动停止不算异常，交外层按正常停止收尾
+                catch (OperationCanceledException) { throw; } // 手动停止不算异常，交外层按正常停止收尾
                 catch (Exception ex) { _logService.LogError($"主循环异常: {ex.Message}"); }
                 await Task.Delay(currentInterval, token);
             }

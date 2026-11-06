@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using TrustNTE.Services.Interfaces;
+using Size = OpenCvSharp.Size;
+using Rect = OpenCvSharp.Rect;
 
 namespace TrustNTE.Services
 {
@@ -71,7 +73,7 @@ namespace TrustNTE.Services
         }
 
         /// <summary>
-        /// 匹配成功返回在全图坐标系下的具体矩形框，失败返回 null。
+        /// 普通单尺度匹配（用于屏幕 UI，如开始钓鱼、结算界面等）。
         /// </summary>
         public Rect? MatchAny(Mat fullFrame, Rect searchRect, string templateBaseName, double threshold = 0.8)
         {
@@ -83,10 +85,8 @@ namespace TrustNTE.Services
 
             using var roiMat = new Mat(fullFrame, actualRect);
             using var grayRoi = new Mat();
-            if (roiMat.Channels() > 1)
-                Cv2.CvtColor(roiMat, grayRoi, ColorConversionCodes.BGR2GRAY);
-            else
-                roiMat.CopyTo(grayRoi);
+            if (roiMat.Channels() > 1) Cv2.CvtColor(roiMat, grayRoi, ColorConversionCodes.BGR2GRAY);
+            else roiMat.CopyTo(grayRoi);
 
             foreach (var template in _templates[templateBaseName])
             {
@@ -97,9 +97,42 @@ namespace TrustNTE.Services
                 Cv2.MinMaxLoc(result, out _, out double maxVal, out _, out Point maxLoc);
 
                 if (maxVal >= threshold)
-                {
-                    // 返回全图绝对坐标
                     return new Rect(actualRect.X + maxLoc.X, actualRect.Y + maxLoc.Y, template.Width, template.Height);
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 多尺度匹配（用于世界锚定提示类元素，如💬钓鱼气泡）。
+        /// </summary>
+        public Rect? MatchAnyMultiScale(Mat fullFrame, Rect searchRect, string templateBaseName, double threshold = 0.8)
+        {
+            if (!_templates.TryGetValue(templateBaseName, out var list) || list.Count == 0) return null;
+            Rect actualRect = searchRect.Intersect(new Rect(0, 0, fullFrame.Width, fullFrame.Height));
+            if (actualRect.Width <= 0 || actualRect.Height <= 0) return null;
+
+            using var roiMat = new Mat(fullFrame, actualRect);
+            using var grayRoi = new Mat();
+            if (roiMat.Channels() > 1) Cv2.CvtColor(roiMat, grayRoi, ColorConversionCodes.BGR2GRAY);
+            else roiMat.CopyTo(grayRoi);
+
+            // 0.75 到 1.45 的尺度，抗各种分辨率拉伸和距离形变
+            double[] scales = { 0.75, 0.85, 1.0, 1.15, 1.3, 1.45 };
+            foreach (var template in list)
+            {
+                foreach (var s in scales)
+                {
+                    int tw = (int)Math.Round(template.Width * s);
+                    int th = (int)Math.Round(template.Height * s);
+                    if (tw < 8 || th < 8 || tw > grayRoi.Width || th > grayRoi.Height) continue;
+
+                    using var tplScaled = new Mat();
+                    Cv2.Resize(template, tplScaled, new Size(tw, th));
+                    using var result = new Mat();
+                    Cv2.MatchTemplate(grayRoi, tplScaled, result, TemplateMatchModes.CCoeffNormed);
+                    Cv2.MinMaxLoc(result, out _, out double maxVal, out _, out Point maxLoc);
+                    if (maxVal >= threshold)
+                        return new Rect(actualRect.X + maxLoc.X, actualRect.Y + maxLoc.Y, tw, th);
                 }
             }
             return null;

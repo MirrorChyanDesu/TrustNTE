@@ -24,6 +24,30 @@ namespace TrustNTE.Services.Implementations
             _clipboardService = clipboardService;
         }
 
+        /// <summary>
+        /// 辅助方法：把主界面强行拉到前台
+        /// </summary>
+        private void RestoreMainWindowFocus()
+        {
+            if (Application.Current?.MainWindow != null)
+            {
+                var mainWin = Application.Current.MainWindow;
+
+                if (mainWin.WindowState == WindowState.Minimized)
+                    mainWin.WindowState = WindowState.Normal;
+
+                mainWin.Show();
+
+                // 专治全屏游戏抢焦点
+                bool wasTopmost = mainWin.Topmost;
+                mainWin.Topmost = true;
+                mainWin.Topmost = wasTopmost;
+
+                mainWin.Activate();
+                mainWin.Focus();
+            }
+        }
+
         public void SendLogToWindows(string message)
         {
             if (_logWindow is LogWindow lw) lw.ReceiveLog(message);
@@ -45,6 +69,7 @@ namespace TrustNTE.Services.Implementations
         {
             _logWindow?.Close();
             _logWindow = null;
+            RestoreMainWindowFocus(); 
         }
 
         public bool? ShowPromptDialog(PromptDialogViewModel viewModel)
@@ -91,7 +116,6 @@ namespace TrustNTE.Services.Implementations
             _previewWindow = null;
         }
 
-        //     恢复你原来正确的 Show 逻辑
         public void ShowOverlayWindow(object dataContext)
         {
             if (_overlayWindow == null)
@@ -108,6 +132,7 @@ namespace TrustNTE.Services.Implementations
         public void HideOverlayWindow()
         {
             _overlayWindow?.HideMask();
+            RestoreMainWindowFocus(); // 修复压底
         }
 
         public void UpdateOverlayPosition(int x, int y, int width, int height)
@@ -139,7 +164,8 @@ namespace TrustNTE.Services.Implementations
                     DataContext = dataContext,
                     Owner = Application.Current.MainWindow
                 };
-                _autoMusicDebugWindow.Closed += (s, e) => _autoMusicDebugWindow = null;
+                // 用户点右上角X关闭时，也恢复主界面
+                _autoMusicDebugWindow.Closed += (s, e) => { _autoMusicDebugWindow = null; RestoreMainWindowFocus(); };
                 _autoMusicDebugWindow.Show();
             }
             else
@@ -162,7 +188,8 @@ namespace TrustNTE.Services.Implementations
             if (_combatDebugWindow == null || !_combatDebugWindow.IsVisible)
             {
                 _combatDebugWindow = new CombatDebugWindow { DataContext = viewModel };
-                _combatDebugWindow.Closed += (s, e) => _combatDebugWindow = null;
+                // 用户点右上角X关闭时，也恢复主界面
+                _combatDebugWindow.Closed += (s, e) => { _combatDebugWindow = null; RestoreMainWindowFocus(); };
                 _combatDebugWindow.Show();
             }
             else
@@ -175,6 +202,7 @@ namespace TrustNTE.Services.Implementations
         {
             _combatDebugWindow?.Close();
             _combatDebugWindow = null;
+            RestoreMainWindowFocus(); // 修复压底
         }
 
         public void ShowMapMatchDebugWindow(MapMatchDebugWindowViewModel viewModel)
@@ -186,7 +214,8 @@ namespace TrustNTE.Services.Implementations
                     DataContext = viewModel,
                     Owner = Application.Current.MainWindow
                 };
-                _mapMatchDebugWindow.Closed += (s, e) => _mapMatchDebugWindow = null;
+                // 用户点右上角X关闭时，也恢复主界面
+                _mapMatchDebugWindow.Closed += (s, e) => { _mapMatchDebugWindow = null; RestoreMainWindowFocus(); };
                 _mapMatchDebugWindow.Show();
             }
             else
@@ -199,6 +228,7 @@ namespace TrustNTE.Services.Implementations
         {
             _mapMatchDebugWindow?.Close();
             _mapMatchDebugWindow = null;
+            RestoreMainWindowFocus(); // 修复压底
         }
 
         public Window? ShowAutoFishingPreviewWindow(AutoFishingPreviewViewModel viewModel)
@@ -210,7 +240,8 @@ namespace TrustNTE.Services.Implementations
                     DataContext = viewModel,
                     Owner = Application.Current.MainWindow
                 };
-                _autoFishingPreviewWindow.Closed += (s, e) => _autoFishingPreviewWindow = null;
+                // 用户点右上角X关闭时，也恢复主界面
+                _autoFishingPreviewWindow.Closed += (s, e) => { _autoFishingPreviewWindow = null; RestoreMainWindowFocus(); };
                 _autoFishingPreviewWindow.Show();
                 return _autoFishingPreviewWindow;
             }
@@ -225,6 +256,7 @@ namespace TrustNTE.Services.Implementations
         {
             _autoFishingPreviewWindow?.Close();
             _autoFishingPreviewWindow = null;
+            RestoreMainWindowFocus(); 
         }
     }
 }

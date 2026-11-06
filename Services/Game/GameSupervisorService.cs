@@ -46,6 +46,7 @@ namespace TrustNTE.Services
         private readonly IGameService _gameService;
         private readonly NteGameStateTemplateService _tpl;
         private readonly ScreenCapturer _screen = new();
+        private readonly NteRenderContextManager _renderCtx;
 
         public SupervisorState State { get; private set; } = SupervisorState.Idle;
         public event Action<SupervisorState>? OnStateChanged;
@@ -67,9 +68,10 @@ namespace TrustNTE.Services
         //守护重启避让检查（由 AutomationService 装配注入）
         public Func<bool>? ShouldAbortRestart { get; set; }
 
-        public GameSupervisorService(ILogService log, IInputRouter router,
-            IGameService gameService, NteGameStateTemplateService tpl)
+        public GameSupervisorService(ILogService log, IInputRouter router, IGameService gameService,
+            NteGameStateTemplateService tpl, NteRenderContextManager renderCtx)
         {
+            _renderCtx = renderCtx;
             _log = log; _router = router; _gameService = gameService; _tpl = tpl;
         }
 
@@ -451,6 +453,9 @@ namespace TrustNTE.Services
         private void ForcePhysicalClick(IntPtr hwnd, int clientX, int clientY)
         {
             if (hwnd == IntPtr.Zero) return;
+
+            // 传入的是 1920×1080 归一化帧上的匹配坐标，先换算成当前客户区物理坐标
+            (clientX, clientY) = _renderCtx.TranslateNtePointer(clientX, clientY);
 
             NativeMethods.ShowWindow(hwnd, NativeMethods.SwRestore);
             Win32Input.KeyDown(KeyCode.Alt);

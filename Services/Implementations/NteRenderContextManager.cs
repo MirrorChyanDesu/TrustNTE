@@ -6,9 +6,6 @@ using System.Runtime.InteropServices;
 
 namespace TrustNTE.Services
 {
-    /// <summary>
-    /// 异环（NTE）渲染上下文管理器。
-    /// </summary>
     public sealed class NteRenderContextManager
     {
         public const int NteBaseWidth = 1920;
@@ -19,29 +16,6 @@ namespace TrustNTE.Services
 
         public bool IsNteStandard => NteCurrentWidth == NteBaseWidth && NteCurrentHeight == NteBaseHeight;
         public bool IsNteAbnormalRatio => Math.Abs((double)NteCurrentWidth / NteCurrentHeight - 16.0 / 9.0) > 0.01;
-
-        static NteRenderContextManager()
-        {
-            NativeLibrary.SetDllImportResolver(typeof(NteRenderContextManager).Assembly, ResolveNativeLibrary);
-        }
-
-        private static IntPtr ResolveNativeLibrary(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
-        {
-            if (libraryName == "NteRenderCore.dll")
-            {
-                string dllPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Nte_Dll", "NteRenderCore.dll");
-                if (File.Exists(dllPath) && NativeLibrary.TryLoad(dllPath, out IntPtr handle))
-                {
-                    return handle;
-                }
-            }
-            return IntPtr.Zero;
-        }
-
-        [DllImport("NteRenderCore.dll", CallingConvention = CallingConvention.Cdecl)]
-        private static extern void NteProcessRenderBuffer(
-            IntPtr src, int srcW, int srcH,
-            IntPtr dst, int dstW, int dstH, int channels);
 
         public void UpdateNteContext(int w, int h)
         {
@@ -56,27 +30,16 @@ namespace TrustNTE.Services
 
             try
             {
-                int channels = frame.Channels();
-                Mat srcMat = frame;
+                var syncedFrame = new Mat();
 
-                if (!frame.IsContinuous()) srcMat = frame.Clone();
-
-                var syncedFrame = new Mat(NteBaseHeight, NteBaseWidth, srcMat.Type());
-                NteProcessRenderBuffer(srcMat.Data, srcMat.Width, srcMat.Height, syncedFrame.Data, NteBaseWidth, NteBaseHeight, channels);
-
-                if (srcMat != frame) srcMat.Dispose();
+                // 🚨 核心修复：使用 Cubic（三次插值），极大程度保留放大后的边缘锐度！
+                Cv2.Resize(frame, syncedFrame, new OpenCvSharp.Size(NteBaseWidth, NteBaseHeight), 0, 0, InterpolationFlags.Cubic);
 
                 return syncedFrame;
             }
-            catch (DllNotFoundException)
+            catch (Exception ex)
             {
-                // C++ 核心 DLL 缺失，退化为 C# OpenCV 双线性缩放
-                var resized = new Mat();
-                Cv2.Resize(frame, resized, new OpenCvSharp.Size(NteBaseWidth, NteBaseHeight));
-                return resized;
-            }
-            catch (Exception)
-            {
+                System.Diagnostics.Debug.WriteLine($"[归一化严重异常] {ex.Message}");
                 return frame.Clone();
             }
         }
