@@ -32,7 +32,7 @@ namespace TrustNTE.Update
 
         private async void ActionBtn_Click(object sender, RoutedEventArgs e) => BeginUpdate();
 
-        // 👇 封装为公开行为，供 Program.cs 和事件处理器调用
+        //     封装为公开行为，供 Program.cs 和事件处理器调用
         public async void BeginUpdate()
         {
             if (_isUpdating || _updateFailed) return;

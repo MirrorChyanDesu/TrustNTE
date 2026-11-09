@@ -1,6 +1,8 @@
 using System.Windows;
 using System.Windows.Input;
 using TrustNTE.Models;
+using TrustNTE.Services;
+using TrustNTE.Services.Implementations;
 
 namespace TrustNTE.Views.Controls
 {
@@ -32,7 +34,6 @@ namespace TrustNTE.Views.Controls
             TextAlignment = TextAlignment.Center;
             VerticalContentAlignment = VerticalAlignment.Center;
 
-            // 强制使用暗色背景和白色字体
             this.SetResourceReference(BackgroundProperty, "ControlFillColorDefaultBrush");
             this.SetResourceReference(ForegroundProperty, "TextFillColorPrimaryBrush");
             this.BorderThickness = new Thickness(0);
@@ -45,21 +46,41 @@ namespace TrustNTE.Views.Controls
         {
             e.Handled = true;
 
-            if (e.Key == Key.Delete || e.Key == Key.Back || e.Key == Key.Escape)
+            // ★ 修复：按住 Alt 时 WPF 把 e.Key 报成 Key.System，真实键在 SystemKey
+            //   原代码直接取 e.Key，导致 Alt 单按被录成 "Alt+System" 垃圾绑定
+            var key = e.Key == Key.System ? e.SystemKey : e.Key;
+
+            if (key == Key.Delete || key == Key.Back || key == Key.Escape)
             {
                 HotKey = HotKey.None;
                 return;
             }
 
-            if (e.Key == Key.LeftCtrl || e.Key == Key.RightCtrl ||
-                e.Key == Key.LeftAlt || e.Key == Key.RightAlt ||
-                e.Key == Key.LeftShift || e.Key == Key.RightShift ||
-                e.Key == Key.LWin || e.Key == Key.RWin)
+            // 修饰键单按、Tab、IME 中间态：吞掉但不提交
+            if (key is Key.LeftCtrl or Key.RightCtrl or Key.LeftAlt or Key.RightAlt
+                     or Key.LeftShift or Key.RightShift or Key.LWin or Key.RWin
+                     or Key.None or Key.System or Key.Tab
+                     or Key.ImeProcessed or Key.DeadCharProcessed)
             {
                 return;
             }
 
-            HotKey = new HotKey { Key = e.Key, Modifiers = Keyboard.Modifiers };
+            HotKey = new HotKey { Key = key, Modifiers = Keyboard.Modifiers };
+        }
+
+        // ★ 录入期间挂起全部全局热键：RegisterHotKey 的键会被系统截走（WM_HOTKEY），
+        //   不挂起的话，"已被全局热键占用的键"永远到不了录入框——这正是
+        //   你之前"设置 F3 没响应也没弹窗直接变空"的根因
+        protected override void OnGotKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnGotKeyboardFocus(e);
+            HotKeyCaptureGate.Begin();
+        }
+
+        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            base.OnLostKeyboardFocus(e);
+            HotKeyCaptureGate.End();
         }
     }
 }

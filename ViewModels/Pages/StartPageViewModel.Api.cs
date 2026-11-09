@@ -38,11 +38,12 @@ namespace TrustNTE.ViewModels.Pages
 
         partial void OnIsApiEnabledChanged(bool value)
         {
-            _config.EnableLocalApi = value;
-            _configService.Save(_config);
-
+            // 启动时恢复开关，或者用户手动拨动，都要开关 API
             if (value) _localApiService.Start();
             else _localApiService.Stop();
+
+            // 只有用户操作时才触发存盘
+            if (!_isInitializing) SaveCurrentConfig();
         }
 
         [RelayCommand]
@@ -109,7 +110,7 @@ namespace TrustNTE.ViewModels.Pages
             setCts(newCts);
             var token = newCts.Token;
 
-            setText("✔️ 成功复制"); // 把之前的 emoji 也加回来了，看着舒服点
+            setText("✔️ 成功复制"); 
 
             try
             {

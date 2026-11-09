@@ -42,7 +42,7 @@
   "默认即可！当无画面时选择其他": "Default is fine! Choose another if no picture.",
   "文档": "Docs",
   "抓帧间隔（毫秒）": "Trigger Interval (ms)",
-  "默认50即可。支持运行中实时   改，下一帧立即生效！": "50 is fine by default. Editable at runtime, takes effect on the next frame.",
+  "默认50即可。支持运行中实时改，下一帧立即生效！": "50 is fine by default. Editable at runtime, takes effect on the next frame.",
   "自动领取月卡/环石": "Auto claim monthly card / Huan Stone",
   "开启后会自动领取,默认关闭(防小白找客服)": "Auto-claim when enabled. Off by default (to avoid support requests).",
   "独立预览窗口": "Independent Preview Window",

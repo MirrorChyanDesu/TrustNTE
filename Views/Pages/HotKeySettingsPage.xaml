@@ -5,7 +5,6 @@
              xmlns:helpers="clr-namespace:TrustNTE.Helpers"
              xmlns:controls="clr-namespace:TrustNTE.Views.Controls"
              Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}">
-
     <Grid Margin="42,16,0,12">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,9 +13,10 @@
         </Grid.RowDefinitions>
 
         <ui:TextBlock Grid.Row="0" Margin="0,0,0,8" FontTypography="BodyStrong" Text="快捷键设置" />
+
         <ui:TextBlock Grid.Row="1" Margin="0,0,0,12"
                       Foreground="{ui:ThemeResource TextFillColorTertiaryBrush}"
-                      Text="全局热键：只支持组合键和功能键，软件启动直接生效。键鼠监听：支持任意键盘单键、鼠标侧键，功能启动后才生效（推荐）。点击类型按钮可以切换快捷键类型。其中存在长按需求的功能不能使用全局热键。"
+                      Text="全局热键：只支持组合键和功能键，系统级注册，软件启动即生效。键鼠监听：支持任意键盘单键与组合键（推荐），软件启动即生效。点击类型按钮可在两种模式间随意切换，已绑定的按键保留不变；同一快捷键只归属一个功能，重复绑定会自动清空旧绑定。长按类功能（如自动飘逸）不支持全局热键。"
                       TextWrapping="Wrap" />
 
         <Border Grid.Row="2"
@@ -31,30 +31,47 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!-- 表头 -->
+                <!-- ★ 表头（已彻底清理干净） -->
                 <Grid Grid.Row="0" Margin="16,12,16,8">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="24" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="120" />
                         <ColumnDefinition Width="140" />
                     </Grid.ColumnDefinitions>
-                    <ui:TextBlock Grid.Column="0" Text="功能" FontTypography="BodyStrong" />
-                    <ui:TextBlock Grid.Column="1" Text="快捷键类型" FontTypography="BodyStrong" HorizontalAlignment="Center" />
-                    <ui:TextBlock Grid.Column="2" Text="配置快捷键" FontTypography="BodyStrong" HorizontalAlignment="Center" />
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ui:TextBlock Text="功能" FontTypography="BodyStrong" VerticalAlignment="Center" />
+
+                        <!-- 文档按钮 -->
+                        <ui:Button Command="{Binding OpenHotkeyDocCommand}" 
+                                   Margin="8,0,0,0" 
+                                   Padding="4,2" 
+                                   Appearance="Transparent" 
+                                   Cursor="Hand" 
+                                   ToolTip="查看快捷键说明文档">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="DocumentText24" FontSize="14" Margin="0,0,4,0" Foreground="{ui:ThemeResource AccentTextFillColorPrimaryBrush}" VerticalAlignment="Center"/>
+                                <TextBlock Text="文档" FontSize="12" Foreground="{ui:ThemeResource AccentTextFillColorPrimaryBrush}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </ui:Button>
+                    </StackPanel>
+
+                    <ui:TextBlock Grid.Column="2" Text="快捷键类型" FontTypography="BodyStrong" HorizontalAlignment="Center" />
+                    <ui:TextBlock Grid.Column="3" Text="配置快捷键" FontTypography="BodyStrong" HorizontalAlignment="Center" />
                 </Grid>
                 <Separator Grid.Row="0" VerticalAlignment="Bottom" Background="{ui:ThemeResource DividerStrokeColorDefaultBrush}" Margin="16,0"/>
 
                 <!-- 树形列表 -->
-                <TreeView Grid.Row="1" 
-                          ItemsSource="{Binding HotKeys}" 
-                          Background="Transparent" 
+                <TreeView Grid.Row="1"
+                          ItemsSource="{Binding HotKeys}"
+                          Background="Transparent"
                           BorderThickness="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          Padding="0,0,0,10">
-
+                          Padding="16,0,16,10">
                     <TreeView.ItemContainerStyle>
                         <Style TargetType="TreeViewItem">
-                            <Setter Property="IsExpanded" Value="True"/>
+                            <Setter Property="IsExpanded" Value="False"/>
                             <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -65,23 +82,47 @@
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
 
-                                            <Border x:Name="Bd" Background="Transparent" CornerRadius="4" Padding="0">
+                                            <Border x:Name="Bd"
+                                                    Background="Transparent"
+                                                    CornerRadius="4" Padding="0"
+                                                    MouseLeftButtonDown="HeaderRow_Click">
                                                 <Grid>
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="24"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
 
-                                                    <!-- 原生展开按钮 -->
-                                                    <ToggleButton x:Name="Expander" Grid.Column="0" ClickMode="Press" 
-                                                                  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+                                                    <ToggleButton x:Name="Expander" Grid.Column="0"
+                                                                  ClickMode="Press" Focusable="False"
+                                                                  Background="Transparent" BorderThickness="0"
+                                                                  IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}">
+                                                        <ToggleButton.Template>
+                                                            <ControlTemplate TargetType="ToggleButton">
+                                                                <Grid Background="Transparent">
+                                                                    <Path x:Name="Arrow"
+                                                                          Data="M 0 0 L 4 4 L 0 8"
+                                                                          Stroke="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                                                                          StrokeThickness="2"
+                                                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                          RenderTransformOrigin="0.5,0.5"/>
+                                                                </Grid>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsChecked" Value="True">
+                                                                        <Setter TargetName="Arrow" Property="RenderTransform">
+                                                                            <Setter.Value>
+                                                                                <RotateTransform Angle="90"/>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </ToggleButton.Template>
+                                                    </ToggleButton>
 
-                                                    <!-- 内容全宽拉伸 -->
-                                                    <ContentPresenter Grid.Column="1" ContentSource="Header" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                                                    <ContentPresenter Grid.Column="1" ContentSource="Header"
+                                                                      HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
                                                 </Grid>
                                             </Border>
-
-                                            <!-- 子节点靠左 -->
                                             <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Margin="0" />
                                         </Grid>
                                         <ControlTemplate.Triggers>
@@ -110,14 +151,11 @@
                                     <ColumnDefinition Width="140" />
                                 </Grid.ColumnDefinitions>
 
-                                <!-- 左侧：功能名称及缩进控制 -->
-                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center" Orientation="Horizontal">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
-                                            <!-- 默认无缩进（针对父级目录） -->
                                             <Setter Property="Margin" Value="0"/>
                                             <Style.Triggers>
-                                                <!-- 如果是子节点，往右缩进 16px -->
                                                 <DataTrigger Binding="{Binding IsDirectory}" Value="False">
                                                     <Setter Property="Margin" Value="24,0,0,0"/>
                                                 </DataTrigger>
@@ -125,45 +163,44 @@
                                         </Style>
                                     </StackPanel.Style>
 
-                                    <ui:TextBlock FontTypography="Body" Text="{Binding FunctionName}">
-                                        <ui:TextBlock.Style>
-                                            <Style TargetType="ui:TextBlock">
-                                                <!-- 子节点字体正常 -->
+                                    <TextBlock FontSize="14" Text="{Binding DisplayName}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
                                                 <Setter Property="FontWeight" Value="Normal"/>
                                                 <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorPrimaryBrush}"/>
                                                 <Style.Triggers>
-                                                    <!-- 父级目录加粗并变色 -->
                                                     <DataTrigger Binding="{Binding IsDirectory}" Value="True">
                                                         <Setter Property="FontWeight" Value="Bold"/>
                                                         <Setter Property="Foreground" Value="{ui:ThemeResource TextFillColorSecondaryBrush}"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </ui:TextBlock.Style>
-                                    </ui:TextBlock>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </StackPanel>
 
-                                <!-- 中间：类型按钮 -->
-                                <ui:Button Grid.Column="1" 
+                                <ui:Button Grid.Column="1"
                                            Height="32" Margin="10,0"
                                            VerticalAlignment="Center" HorizontalAlignment="Center"
                                            Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
                                            Command="{Binding DataContext.SwitchTypeCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                           CommandParameter="{Binding}">
+                                           CommandParameter="{Binding}"
+                                           ToolTip="{Binding TypeToolTip}"
+                                           ToolTipService.ShowOnDisabled="True">
                                     <ui:Button.Style>
                                         <Style TargetType="ui:Button" BasedOn="{StaticResource {x:Type ui:Button}}">
                                             <Setter Property="Content" Value="{Binding HotKeyTypeName}" />
+                                            <Setter Property="Appearance" Value="Secondary" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding HotKeyType}" Value="None">
-                                                    <Setter Property="Appearance" Value="Secondary" />
+                                                <DataTrigger Binding="{Binding AllowGlobal}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </ui:Button.Style>
                                 </ui:Button>
 
-                                <!-- 右侧：录入框 -->
-                                <controls:HotKeyTextBox Grid.Column="2" 
+                                <controls:HotKeyTextBox Grid.Column="2"
                                                         Margin="10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Width="120"
                                                         Visibility="{Binding IsDirectory, Converter={StaticResource BooleanToInverseVisibilityConverter}}"
                                                         HotKey="{Binding HotKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

@@ -37,9 +37,13 @@ namespace TrustNTE.ViewModels.Pages
 
         private void InitializeCapture()
         {
-            SelectedCaptureMode = _config.CaptureMode;
 
-            //        旧配置名兼容迁移（极其重要，防止老用户配置静默变空）
+            // 从配置中恢复上次选择的截图引擎
+            if (!string.IsNullOrWhiteSpace(_config.CaptureMode))
+            {
+                SelectedCaptureMode = _config.CaptureMode;
+            }
+            // 旧配置名兼容迁移（极其重要，防止老用户配置静默变空）
             if (_config.MouseDriveType == "通用点击")
                 _config.MouseDriveType = "通用点击";
         }

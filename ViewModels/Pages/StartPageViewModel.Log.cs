@@ -35,17 +35,21 @@ namespace TrustNTE.ViewModels.Pages
 
         partial void OnMaskOpacityChanged(double value)
         {
-            SaveCurrentConfig();
+            if (!_isInitializing) SaveCurrentConfig(); //守卫
             _windowService?.SetOverlayBackgroundOpacity(value);
         }
 
         partial void OnMaskTextOpacityChanged(double value)
         {
-            SaveCurrentConfig();
+            if (!_isInitializing) SaveCurrentConfig(); //守卫
             _windowService?.SetOverlayTextOpacity(value);
         }
 
-        partial void OnIsLogEnabledChanged(bool value) => _logService.IsEnabled = value;
+        partial void OnIsLogEnabledChanged(bool value)
+        {
+            _logService.IsEnabled = value;
+            if (!_isInitializing) SaveCurrentConfig();
+        }
 
         private void OnLogColorChanged()
         {

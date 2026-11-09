@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TrustNTE · 让异环解放双手</title>
+<style>
+  *{box-sizing:border-box;}
+  :root{
+    --hue:175;
+    --cyan:hsl(var(--hue),100%,62%);
+    --pink:hsl(calc(var(--hue) + 95),100%,62%);
+    --bg:#05010a;
+    --txt:#dff6ff;
+    --mono:ui-monospace,SFMono-Regular,Consolas,"Courier New",monospace;
+  }
+  html{overflow-x:hidden;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 50% -12%, hsl(var(--hue),90%,17%) 0%, transparent 62%),
+      radial-gradient(900px 500px at 92% 105%, hsl(calc(var(--hue) + 60),90%,14%) 0%, transparent 62%),
+      var(--bg);
+    color:var(--txt);
+    font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+    display:flex;
+    align-items:safe center;
+    justify-content:center;
+    padding:56px 20px 120px;
+    overflow-x:hidden;
+    transition:background .6s linear;
+  }
+
+  @media (hover:hover) and (pointer:fine){
+    *{cursor:none !important;}
+  }
+
+  /* ===== 背景透视网格 ===== */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:-50%;
+    background-image:
+      linear-gradient(hsla(var(--hue),100%,60%,.075) 1px, transparent 1px),
+      linear-gradient(90deg, hsla(var(--hue),100%,60%,.075) 1px, transparent 1px);
+    background-size:64px 64px;
+    transform:perspective(620px) rotateX(62deg);
+    animation:gridMove 6s linear infinite;
+    pointer-events:none;
+    z-index:0;
+  }
+  @keyframes gridMove{
+    from{ background-position:0 0, 0 0; }
+    to  { background-position:0 64px, 64px 0; }
+  }
+
+  #rain{
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    opacity:.35;
+    pointer-events:none;
+    z-index:0;
+  }
+
+  /* ===== 扫描线 ===== */
+  .scanlines{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:6;
+    background:repeating-linear-gradient(to bottom, rgba(255,255,255,.03) 0 1px, transparent 1px 3px);
+    mix-blend-mode:overlay;
+    overflow:hidden;
+  }
+  .scanlines::after{
+    content:"";
+    position:absolute; left:0; right:0; height:160px;
+    background:linear-gradient(to bottom, transparent, hsla(var(--hue),100%,60%,.07), transparent);
+    animation:scan 8s linear infinite;
+  }
+  @keyframes scan{
+    from{ top:-25%; }
+    to  { top:115%; }
+  }
+
+  /* ================= 自定义光标 ================= */
+  .cursor-glow{
+    position:fixed; left:0; top:0;
+    width:640px; height:640px;
+    border-radius:50%;
+    background:radial-gradient(circle,
+      hsla(var(--hue),100%,60%,.13),
+      hsla(calc(var(--hue) + 70),100%,60%,.07) 45%,
+      transparent 68%);
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    z-index:1;
+    will-change:transform;
+  }
+  .cursor-ring{
+    position:fixed; left:0; top:0;
+    width:46px; height:46px;
+    margin:-23px 0 0 -23px;
+    border-radius:50%;
+    border:1px solid hsla(var(--hue),100%,62%,.9);
+    box-shadow:
+      0 0 14px hsla(var(--hue),100%,60%,.85),
+      inset 0 0 14px hsla(var(--hue),100%,60%,.35);
+    pointer-events:none;
+    z-index:9999;
+    will-change:transform;
+    transition:width .18s ease, height .18s ease, margin .18s ease, border-color .3s;
+  }
+  .cursor-ring::before{
+    content:"";
+    position:absolute; inset:7px;
+    border-radius:50%;
+    border:1px dashed hsla(calc(var(--hue) + 90),100%,65%,.75);
+    animation:spin 3.2s linear infinite;
+  }
+  .cursor-ring::after{
+    content:"";
+    position:absolute; inset:-7px;
+    border-radius:50%;
+    border:1px solid hsla(var(--hue),100%,60%,.18);
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .cursor-ring.hot{
+    width:64px; height:64px;
+    margin:-32px 0 0 -32px;
+    border-color:hsl(calc(var(--hue) + 95),100%,65%);
+    box-shadow:
+      0 0 22px hsla(calc(var(--hue) + 95),100%,60%,.9),
+      inset 0 0 20px hsla(calc(var(--hue) + 95),100%,60%,.4);
+  }
+
+  .cursor-dot{
+    position:fixed; left:0; top:0;
+    width:7px; height:7px;
+    margin:-3.5px 0 0 -3.5px;
+    border-radius:50%;
+    background:hsl(var(--hue),100%,72%);
+    box-shadow:0 0 12px hsl(var(--hue),100%,62%), 0 0 26px hsla(var(--hue),100%,60%,.7);
+    pointer-events:none;
+    z-index:10000;
+    will-change:transform;
+  }
+
+  .spark{
+    position:fixed;
+    width:5px; height:5px;
+    margin:-2.5px 0 0 -2.5px;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9998;
+    box-shadow:0 0 8px currentColor;
+    will-change:transform, opacity;
+  }
+
+  .pulse{
+    position:fixed;
+    width:20px; height:20px;
+    margin:-10px 0 0 -10px;
+    border-radius:50%;
+    border:2px solid hsl(var(--hue),100%,65%);
+    pointer-events:none;
+    z-index:9997;
+    animation:pulseOut .65s cubic-bezier(.2,.7,.3,1) forwards;
+  }
+  @keyframes pulseOut{
+    from{ transform:scale(.4); opacity:.95; }
+    to  { transform:scale(7); opacity:0; }
+  }
+
+  /* ===== 主体 ===== */
+  .wrap{
+    position:relative;
+    z-index:3;
+    width:min(1020px,100%);
+    text-align:center;
+  }
+
+  .hud-top{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font:600 11px/1 var(--mono);
+    letter-spacing:.26em;
+    color:hsl(var(--hue),100%,78%);
+    border:1px solid hsla(var(--hue),100%,60%,.3);
+    background:hsla(var(--hue),100%,60%,.05);
+    padding:9px 18px;
+    border-radius:999px;
+    margin-bottom:30px;
+    box-shadow:0 0 24px hsla(var(--hue),100%,60%,.12) inset;
+    transition:color .5s, border-color .5s, background .5s;
+  }
+  .dot{
+    width:7px; height:7px; border-radius:50%;
+    background:hsl(calc(var(--hue) + 70),100%,62%);
+    box-shadow:0 0 10px hsl(calc(var(--hue) + 70),100%,62%);
+    animation:blink 1.4s infinite;
+  }
+  @keyframes blink{
+    0%,100%{opacity:1;}
+    50%{opacity:.25;}
+  }
+
+  /* ===== 故障标题 ===== */
+  h1.glitch{
+    position:relative;
+    margin:0;
+    font-family:var(--mono);
+    font-size:clamp(42px,10.5vw,94px);
+    font-weight:900;
+    letter-spacing:.04em;
+    color:#ffffff;
+    text-shadow:
+      0 0 8px hsl(var(--hue),100%,62%),
+      0 0 28px hsla(var(--hue),100%,60%,.6),
+      0 0 60px hsla(calc(var(--hue) + 70),100%,60%,.55);
+    animation:flicker 7s infinite;
+    line-height:1.05;
+    transition:text-shadow .5s linear;
+  }
+  h1.glitch::before,
+  h1.glitch::after{
+    content:attr(data-text);
+    position:absolute; left:0; top:0;
+    width:100%;
+    pointer-events:none;
+  }
+  h1.glitch::before{
+    color:hsl(calc(var(--hue) + 95),100%,62%);
+    text-shadow:0 0 14px hsla(calc(var(--hue) + 95),100%,60%,.9);
+    clip-path:inset(0 0 56% 0);
+    animation:glitchA 3.4s infinite steps(1);
+  }
+  h1.glitch::after{
+    color:hsl(var(--hue),100%,62%);
+    text-shadow:0 0 14px hsla(var(--hue),100%,60%,.9);
+    clip-path:inset(56% 0 0 0);
+    animation:glitchB 2.9s infinite steps(1);
+  }
+  @keyframes glitchA{
+    0%,90%,100%{ transform:translate(0,0); opacity:.85; }
+    91%{ transform:translate(-5px,-2px); opacity:1; }
+    94%{ transform:translate(4px,2px); opacity:.6; }
+    97%{ transform:translate(-3px,1px); opacity:1; }
+  }
+  @keyframes glitchB{
+    0%,88%,100%{ transform:translate(0,0); opacity:.85; }
+    89%{ transform:translate(5px,2px); opacity:1; }
+    93%{ transform:translate(-4px,-1px); opacity:.6; }
+    96%{ transform:translate(3px,-2px); opacity:1; }
+  }
+  @keyframes flicker{
+    0%,96%,100%{ opacity:1; }
+    97%{ opacity:.72; }
+    98%{ opacity:1; }
+    99%{ opacity:.86; }
+  }
+
+  .sub{
+    margin:18px 0 0;
+    font-size:clamp(14px,2.5vw,19px);
+    letter-spacing:.34em;
+    text-indent:.34em;
+    color:hsl(var(--hue),70%,80%);
+    text-shadow:0 0 16px hsla(var(--hue),100%,60%,.55);
+    transition:color .5s, text-shadow .5s;
+  }
+  .sub b{ color:#fff; font-weight:600; }
+
+  .divider{
+    height:1px;
+    margin:30px auto 0;
+    width:min(560px,90%);
+    background:linear-gradient(90deg, transparent, var(--cyan), var(--pink), transparent);
+    opacity:.75;
+    box-shadow:0 0 18px hsla(var(--hue),100%,60%,.5);
+  }
+
+  /* ===== 卡片网格 ===== */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px,1fr));
+    gap:20px;
+    margin-top:42px;
+    text-align:left;
+  }
+
+  .card{
+    --cut:15px;
+    position:relative;
+    padding:20px 20px 18px;
+    background:linear-gradient(155deg, hsla(calc(var(--hue) + 40),60%,16%,.94), rgba(7,3,14,.96));
+    clip-path:polygon(
+      var(--cut) 0, 100% 0,
+      100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%,
+      0 100%, 0 var(--cut)
+    );
+    box-shadow:
+      inset 0 0 0 1px hsla(var(--hue),100%,60%,.32),
+      inset 0 0 50px hsla(var(--hue),100%,60%,.05);
+    translate:0 0;
+    scale:1;
+    transition:
+      translate .3s cubic-bezier(.2,.8,.3,1),
+      scale .2s ease,
+      box-shadow .3s,
+      filter .3s,
+      background .5s;
+    overflow:hidden;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  /* 卡片内部呼吸光晕 */
+  .card::before{
+    content:"";
+    position:absolute;
+    inset:-30%;
+    background:radial-gradient(circle at 50% 50%,
+      hsla(var(--hue),100%,65%,.55) 0%,
+      hsla(calc(var(--hue) + 60),100%,60%,.18) 40%,
+      transparent 70%);
+    pointer-events:none;
+    z-index:0;
+    animation:cardBreath 5s ease-in-out infinite;
+    transition:opacity .3s;
+  }
+  .card:hover::before{
+    animation-duration:1.5s;
+  }
+  @keyframes cardBreath{
+    0%,100%{ opacity:.18; }
+    50%    { opacity:.62; }
+  }
+
+  /* 悬停扫光 */
+  .card::after{
+    content:"";
+    position:absolute; top:0; left:-130%;
+    width:70%; height:100%;
+    background:linear-gradient(100deg, transparent, hsla(var(--hue),100%,60%,.18), transparent);
+    transition:left .65s ease;
+    pointer-events:none;
+    z-index:2;
+  }
+  .card:hover::after{ left:150%; }
+
+  /* 内容层叠 */
+  .card > *{
+    position:relative;
+    z-index:1;
+  }
+
+  .card:hover{
+    translate:0 -6px;
+    filter:drop-shadow(0 0 16px hsla(var(--hue),100%,60%,.4));
+    box-shadow:
+      inset 0 0 0 1px hsl(calc(var(--hue) + 95),100%,65%),
+      inset 0 0 60px hsla(calc(var(--hue) + 95),100%,60%,.14);
+  }
+  .card:active{
+    translate:0 -2px;
+    scale:.99;
+  }
+
+  /* ===== 故障抖动 ===== */
+  .card.glitching{
+    animation:glitchShake .55s linear;
+  }
+  @keyframes glitchShake{
+    0%  { transform:translate(0,0) skewX(0deg); filter:none; }
+    8%  { transform:translate(-7px,2px) skewX(4deg); filter:hue-rotate(70deg) saturate(2.2); }
+    16% { transform:translate(6px,-3px) skewX(-3deg); filter:hue-rotate(-50deg) saturate(2.6); }
+    24% { transform:translate(-5px,4px) skewX(3deg); filter:hue-rotate(140deg) saturate(1.4); }
+    32% { transform:translate(5px,-2px) skewX(-2deg); filter:hue-rotate(-90deg) saturate(2); }
+    44% { transform:translate(-4px,-3px) skewX(2deg); filter:hue-rotate(220deg) saturate(1.2); }
+    56% { transform:translate(3px,3px) skewX(-1.5deg); filter:hue-rotate(0deg) saturate(1); }
+    68% { transform:translate(-2px,1px) skewX(.5deg); filter:none; }
+    80% { transform:translate(2px,-1px); }
+    92% { transform:translate(-1px,0); }
+    100%{ transform:translate(0,0) skewX(0deg); filter:none; }
+  }
+
+  .card-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+  }
+  .tag{
+    font:700 12px/1 var(--mono);
+    letter-spacing:.16em;
+    color:#05010a;
+    background:linear-gradient(135deg, var(--cyan), hsl(var(--hue),100%,80%));
+    padding:5px 10px;
+    clip-path:polygon(0 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
+  }
+  .status{
+    font:600 10px/1 var(--mono);
+    letter-spacing:.2em;
+    color:hsl(var(--hue),100%,75%);
+  }
+  .status.ok::before{
+    content:"●";
+    color:hsl(calc(var(--hue) + 70),100%,62%);
+    margin-right:5px;
+    animation:blink 1.5s infinite;
+  }
+  .status.warn{ color:hsl(calc(var(--hue) + 95),100%,72%); }
+  .status.warn::before{
+    content:"●";
+    color:var(--pink);
+    margin-right:5px;
+    animation:blink .9s infinite;
+  }
+
+  .label{
+    margin-top:20px;
+    font-size:12px;
+    letter-spacing:.22em;
+    color:#8fa8bd;
+  }
+  .num{
+    margin:8px 0 18px;
+    font-family:var(--mono);
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:.05em;
+    color:#ffffff;
+    text-shadow:0 0 14px hsla(var(--hue),100%,60%,.7), 0 0 34px hsla(var(--hue),100%,60%,.35);
+    white-space:nowrap;
+    transition:text-shadow .5s;
+  }
+  .num.small{
+    font-size:14px;
+    letter-spacing:.12em;
+    color:hsl(calc(var(--hue) + 95),100%,80%);
+    text-shadow:0 0 14px hsla(calc(var(--hue) + 95),100%,60%,.7);
+  }
+
+  .btn{
+    width:100%;
+    padding:10px 14px;
+    font:600 12px/1 var(--mono);
+    letter-spacing:.16em;
+    color:var(--cyan);
+    background:transparent;
+    border:1px solid hsla(var(--hue),100%,60%,.45);
+    border-radius:2px;
+    transition:all .22s ease;
+    font-family:var(--mono);
+  }
+  .btn:hover{
+    background:var(--cyan);
+    color:#05010a;
+    box-shadow:0 0 22px hsla(var(--hue),100%,60%,.7);
+    border-color:var(--cyan);
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn[disabled]{
+    color:#6f6f8a;
+    border-color:hsla(calc(var(--hue) + 95),100%,60%,.3);
+    background:hsla(calc(var(--hue) + 95),100%,60%,.05);
+  }
+  .btn[disabled]:hover{
+    background:hsla(calc(var(--hue) + 95),100%,60%,.05);
+    color:#6f6f8a;
+    box-shadow:none;
+  }
+
+  .card.pending{
+    box-shadow:
+      inset 0 0 0 1px hsla(calc(var(--hue) + 95),100%,60%,.32),
+      inset 0 0 50px hsla(calc(var(--hue) + 95),100%,60%,.06);
+  }
+  .card.pending:hover{
+    translate:0 0;
+    filter:none;
+    box-shadow:
+      inset 0 0 0 1px hsla(calc(var(--hue) + 95),100%,60%,.55),
+      inset 0 0 60px hsla(calc(var(--hue) + 95),100%,60%,.10);
+  }
+  .card.pending::after{ display:none; }
+
+  footer{
+    margin-top:46px;
+    font:500 11px/1.9 var(--mono);
+    letter-spacing:.18em;
+    color:#5c7891;
+  }
+  footer span{ color:var(--cyan); }
+
+  /* ===== 提示条 ===== */
+  .toast{
+    position:fixed;
+    left:50%;
+    bottom:58px;
+    transform:translate(-50%, 22px);
+    padding:13px 26px;
+    font:600 13px/1 var(--mono);
+    letter-spacing:.14em;
+    color:var(--cyan);
+    background:hsla(var(--hue),100%,60%,.10);
+    border:1px solid var(--cyan);
+    border-radius:2px;
+    box-shadow:0 0 34px hsla(var(--hue),100%,60%,.45);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .32s ease, transform .32s ease;
+    z-index:99;
+    white-space:nowrap;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
+  .toast.error{
+    color:var(--pink);
+    border-color:var(--pink);
+    background:hsla(calc(var(--hue) + 95),100%,60%,.10);
+    box-shadow:0 0 34px hsla(calc(var(--hue) + 95),100%,60%,.45);
+  }
+
+  /* ===== 底部终端日志 ===== */
+  .term-bar{
+    position:fixed;
+    left:0; right:0; bottom:0;
+    height:36px;
+    display:flex;
+    align-items:stretch;
+    background:linear-gradient(90deg, rgba(5,1,10,.96), hsla(var(--hue),60%,8%,.93), rgba(5,1,10,.96));
+    border-top:1px solid hsla(var(--hue),100%,60%,.38);
+    box-shadow:
+      0 -2px 22px hsla(var(--hue),100%,60%,.16),
+      inset 0 1px 0 hsla(var(--hue),100%,60%,.22);
+    font:500 11px/36px var(--mono);
+    letter-spacing:.08em;
+    overflow:hidden;
+    z-index:90;
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    animation:termIn .8s cubic-bezier(.2,.8,.3,1) both;
+  }
+  @keyframes termIn{
+    from{ transform:translateY(100%); opacity:0; }
+    to  { transform:translateY(0); opacity:1; }
+  }
+  .term-prefix{
+    flex-shrink:0;
+    padding:0 16px;
+    color:hsl(var(--hue),100%,72%);
+    border-right:1px solid hsla(var(--hue),100%,60%,.3);
+    background:hsla(var(--hue),100%,60%,.08);
+    letter-spacing:.2em;
+    white-space:nowrap;
+  }
+  .term-track-wrap{
+    flex:1;
+    overflow:hidden;
+    position:relative;
+  }
+  .term-track{
+    display:flex;
+    flex-wrap:nowrap;
+    width:max-content;
+    will-change:transform;
+    animation:termScroll 56s linear infinite;
+  }
+  @keyframes termScroll{
+    from{ transform:translateX(0); }
+    to  { transform:translateX(-50%); }
+  }
+  .log-item{
+    flex-shrink:0;
+    margin-right:56px;
+    white-space:nowrap;
+  }
+  .log-item.ok{ color:hsl(var(--hue),100%,68%); }
+  .log-item.warn{ color:hsl(calc(var(--hue) + 95),100%,68%); }
+
+  @media (max-width:520px){
+    body{ padding:38px 16px 110px; }
+    .grid{ gap:14px; margin-top:32px; }
+    .card{ padding:16px 16px 14px; }
+    .num{ font-size:19px; }
+    .toast{ font-size:11px; padding:11px 18px; letter-spacing:.1em; bottom:50px; }
+    .term-bar{ height:32px; font-size:10px; line-height:32px; }
+    .term-prefix{ padding:0 10px; }
+    .log-item{ margin-right:40px; }
+  }
+
+  @media (hover:none), (pointer:coarse){
+    .cursor-ring,.cursor-dot,.cursor-glow,.spark{ display:none !important; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <canvas id="rain"></canvas>
+
+  <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+  <div class="cursor-dot"  id="cursorDot"  aria-hidden="true"></div>
+
+  <div class="scanlines"></div>
+
+  <main class="wrap">
+
+    <div class="hud-top">
+      <i class="dot"></i> SYSTEM ONLINE · TRUSTNTE COMMUNITY
+    </div>
+
+    <header>
+      <h1 class="glitch" data-text="TrustNTE">TrustNTE</h1>
+      <p class="sub">让<b>异环</b>解放双手！</p>
+      <div class="divider"></div>
+    </header>
+
+    <section class="grid">
+
+      <article class="card" data-qq="796636370">
+        <div class="card-top">
+          <span class="tag">Q1</span>
+          <span class="status ok">ONLINE</span>
+        </div>
+        <div class="label">官方一群</div>
+        <div class="num">796 636 370</div>
+        <button class="btn" type="button">复 制 群 号</button>
+      </article>
+
+      <article class="card" data-qq="1094574886">
+        <div class="card-top">
+          <span class="tag">Q2</span>
+          <span class="status ok">ONLINE</span>
+        </div>
+        <div class="label">官方二群</div>
+        <div class="num">1094 574 886</div>
+        <button class="btn" type="button">复 制 群 号</button>
+      </article>
+
+      <article class="card" data-qq="571288937">
+        <div class="card-top">
+          <span class="tag">Q3</span>
+          <span class="status ok">ONLINE</span>
+        </div>
+        <div class="label">官方三群</div>
+        <div class="num">571 288 937</div>
+        <button class="btn" type="button">复 制 群 号</button>
+      </article>
+
+      <article class="card pending">
+        <div class="card-top">
+          <span class="tag">Q4</span>
+          <span class="status warn">STANDBY</span>
+        </div>
+        <div class="label">预备四群</div>
+        <div class="num small">上方群满后再开启</div>
+        <button class="btn" type="button" disabled>敬 请 期 待</button>
+      </article>
+
+    </section>
+
+    <footer>
+      // 点击任意卡片即可复制群号 &nbsp;·&nbsp; <span>TrustNTE</span> 与你同在
+    </footer>
+
+  </main>
+
+  <div class="toast" id="toast">已复制</div>
+
+  <div class="term-bar" aria-hidden="true">
+    <div class="term-prefix">SYS.LOG ▸</div>
+    <div class="term-track-wrap">
+      <div class="term-track" id="termTrack"></div>
+    </div>
+  </div>
+
+<script>
+(function () {
+  "use strict";
+
+  const root = document.documentElement;
+  const isFinePointer = window.matchMedia("(hover:hover) and (pointer:fine)").matches;
+
+  /* ================= 1. 数字雨（含指针排斥） ================= */
+  const canvas = document.getElementById("rain");
+  const ctx = canvas.getContext("2d");
+  const CHARS = "01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワンABCDEF0123456789<>/\\";
+  const FONT_SIZE = 15;
+  const REPEL_R = 115;
+  const REPEL_R2 = REPEL_R * REPEL_R;
+  let cols = 0;
+  let drops = [];
+  let pointerInWindow = false;
+
+  function initRain() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    cols = Math.floor(canvas.width / FONT_SIZE);
+    drops = new Array(cols).fill(0).map(() => Math.random() * -120);
+    ctx.fillStyle = "#05010a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function drawRain() {
+    ctx.fillStyle = "rgba(5,1,10,0.09)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = FONT_SIZE + "px monospace";
+
+    const h = hue;
+    const hStr = h.toFixed(0);
+    const hotH = ((h + 95) % 360).toFixed(0);
+
+    for (let i = 0; i < cols; i++) {
+      const ch = CHARS.charAt(Math.floor(Math.random() * CHARS.length));
+      const x = i * FONT_SIZE;
+      const y = drops[i] * FONT_SIZE;
+
+      let drawX = x;
+      let drawY = y;
+      let alphaMul = 1;
+
+      // === 指针排斥 ===
+      if (pointerInWindow) {
+        const ddx = x - dx;
+        const ddy = y - dy;
+        const dsq = ddx * ddx + ddy * ddy;
+        if (dsq < REPEL_R2) {
+          const d = Math.sqrt(dsq) || 0.001;
+          const f = 1 - d / REPEL_R;
+          const push = f * 58;
+          drawX += (ddx / d) * push;
+          drawY += (ddy / d) * push;
+          alphaMul = 0.18 + (d / REPEL_R) * 0.82;
+        }
+      }
+
+      // === 颜色 ===
+      if (Math.random() > 0.975) {
+        ctx.fillStyle = "hsla(" + hotH + ",100%,62%," + (0.92 * alphaMul) + ")";
+        ctx.shadowColor = "hsl(" + hotH + ",100%,62%)";
+        ctx.shadowBlur = 8;
+      } else {
+        ctx.fillStyle = "hsla(" + hStr + ",100%,60%," + (0.55 * alphaMul) + ")";
+        ctx.shadowBlur = 0;
+      }
+
+      ctx.fillText(ch, drawX, drawY);
+      ctx.shadowBlur = 0;
+
+      if (y > canvas.height && Math.random() > 0.972) drops[i] = 0;
+      drops[i]++;
+    }
+  }
+
+  initRain();
+  setInterval(drawRain, 45);
+
+  let resizeTimer = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(initRain, 180);
+  });
+
+  /* ================= 2. 指针系统 ================= */
+  const glowEl = document.getElementById("cursorGlow");
+  const ringEl = document.getElementById("cursorRing");
+  const dotEl  = document.getElementById("cursorDot");
+
+  let hue = 175;
+  let targetHue = 175;
+  let lastSetHue = -999;
+
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  let dx = mx, dy = my;
+  let rx = mx, ry = my;
+  let gx = mx, gy = my;
+  let prevX = mx, prevY = my;
+  const sparks = [];
+
+  function setCursorVisible(v) {
+    const op = v ? "1" : "0";
+    glowEl.style.opacity = op;
+    ringEl.style.opacity = op;
+    dotEl.style.opacity = op;
+  }
+  if (!isFinePointer) setCursorVisible(false);
+
+  document.addEventListener("pointermove", function (e) {
+    mx = e.clientX;
+    my = e.clientY;
+    pointerInWindow = true;
+    const t = Math.min(1, Math.max(0, mx / window.innerWidth));
+    targetHue = 160 + t * 170;
+  }, { passive: true });
+
+  document.addEventListener("mouseleave", function () {
+    setCursorVisible(false);
+    pointerInWindow = false;
+  });
+  document.addEventListener("mouseenter", function () {
+    setCursorVisible(true);
+    pointerInWindow = true;
+  });
+
+  document.addEventListener("pointerover", function (e) {
+    const hot = e.target.closest(".btn, .card, [role='button']");
+    ringEl.classList.toggle("hot", !!hot);
+  }, true);
+
+  function spawnSpark(x, y) {
+    if (sparks.length > 42) return;
+    const el = document.createElement("span");
+    el.className = "spark";
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+    el.style.color = "hsl(" + hue.toFixed(0) + ",100%,65%)";
+    el.style.background = "hsl(" + hue.toFixed(0) + ",100%,70%)";
+    el.style.opacity = "1";
+    document.body.appendChild(el);
+    sparks.push({
+      el: el,
+      life: 1,
+      vx: (Math.random() - 0.5) * 0.7,
+      vy: (Math.random() - 0.5) * 0.7 - 0.15
+    });
+  }
+
+  function render() {
+    hue += (targetHue - hue) * 0.09;
+    if (Math.abs(hue - lastSetHue) > 0.3) {
+      root.style.setProperty("--hue", hue.toFixed(1));
+      lastSetHue = hue;
+    }
+
+    dx += (mx - dx) * 0.42;
+    dy += (my - dy) * 0.42;
+    rx += (mx - rx) * 0.16;
+    ry += (my - ry) * 0.16;
+    gx += (mx - gx) * 0.07;
+    gy += (my - gy) * 0.07;
+
+    dotEl.style.transform  = "translate(" + dx + "px," + dy + "px)";
+    ringEl.style.transform = "translate(" + rx + "px," + ry + "px)";
+    glowEl.style.transform = "translate(" + gx + "px," + gy + "px) translate(-50%,-50%)";
+
+    const dist = Math.hypot(mx - prevX, my - prevY);
+    if (isFinePointer && dist > 3 && dist < 90) {
+      spawnSpark(mx, my);
+      if (dist > 16) spawnSpark(mx - (mx - prevX) * 0.5, my - (my - prevY) * 0.5);
+    }
+    prevX = mx;
+    prevY = my;
+
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const p = sparks[i];
+      p.life -= 0.035;
+      if (p.life <= 0) {
+        p.el.remove();
+        sparks.splice(i, 1);
+        continue;
+      }
+      p.el.style.transform = "translate(" + p.vx * (1 - p.life) * 26 + "px,"
+                           + (p.vy * (1 - p.life) * 26 - (1 - p.life) * 14) + "px) scale(" + p.life + ")";
+      p.el.style.opacity = p.life * 0.9;
+    }
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
+
+  document.addEventListener("pointerdown", function (e) {
+    if (!isFinePointer) return;
+    const p = document.createElement("div");
+    p.className = "pulse";
+    p.style.left = e.clientX + "px";
+    p.style.top = e.clientY + "px";
+    p.style.borderColor = "hsl(" + hue.toFixed(0) + ",100%,68%)";
+    document.body.appendChild(p);
+    p.addEventListener("animationend", function () { p.remove(); });
+  });
+
+  /* ================= 3. 复制 + 卡片故障抖动 ================= */
+  const toast = document.getElementById("toast");
+  let toastTimer = null;
+
+  function showToast(msg, isError) {
+    toast.textContent = msg;
+    toast.classList.toggle("error", !!isError);
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 1900);
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    let ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch (err) {
+      ok = false;
+    }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text).then(
+        function () { return true; },
+        function () { return fallbackCopy(text); }
+      );
+    }
+    return Promise.resolve(fallbackCopy(text));
+  }
+
+  function glitchShake(card) {
+    card.classList.remove("glitching");
+    void card.offsetWidth;
+    card.classList.add("glitching");
+  }
+
+  function handleCopy(qq, btn) {
+    copyText(qq).then(function (ok) {
+      if (ok) {
+        showToast("已复制群号 · " + qq, false);
+        if (btn) {
+          const origin = btn.textContent;
+          btn.textContent = "✓ 已 复 制";
+          setTimeout(function () { btn.textContent = origin; }, 1500);
+        }
+      } else {
+        showToast("复制失败，请手动记录：" + qq, true);
+      }
+    });
+  }
+
+  document.querySelectorAll(".card[data-qq]").forEach(function (card) {
+    const qq = card.getAttribute("data-qq");
+    const btn = card.querySelector(".btn");
+
+    if (btn) {
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        glitchShake(card);
+        handleCopy(qq, btn);
+      });
+    }
+
+    card.addEventListener("click", function () {
+      glitchShake(card);
+      handleCopy(qq, btn);
+    });
+
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-label", "复制群号 " + qq);
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        glitchShake(card);
+        handleCopy(qq, btn);
+      }
+    });
+  });
+
+  // 动画结束后移除 glitching 类
+  document.querySelectorAll(".card").forEach(function (card) {
+    card.addEventListener("animationend", function (e) {
+      if (e.animationName === "glitchShake") {
+        card.classList.remove("glitching");
+      }
+    });
+  });
+
+  /* ================= 4. 标题：悬停乱码 + 待机屏保 ================= */
+  const h1 = document.querySelector("h1.glitch");
+  const ORIGINAL = "TrustNTE";
+  const POOL = "TRUSTNTE#$%&*01<>/\\[]{}!?¿¡";
+
+  // 悬停小彩蛋
+  h1.addEventListener("mouseenter", function () {
+    let ticks = 0;
+    const timer = setInterval(function () {
+      let out = "";
+      for (let i = 0; i < ORIGINAL.length; i++) {
+        out += Math.random() > 0.55
+          ? POOL.charAt(Math.floor(Math.random() * POOL.length))
+          : ORIGINAL.charAt(i);
+      }
+      h1.textContent = out;
+      h1.setAttribute("data-text", out);
+      if (++ticks > 7) {
+        clearInterval(timer);
+        h1.textContent = ORIGINAL;
+        h1.setAttribute("data-text", ORIGINAL);
+      }
+    }, 55);
+  });
+
+  // 待机屏保：空闲 30 秒进入
+  const IDLE_MS = 30000;
+  let lastInteraction = Date.now();
+  let idleTimer = null;
+  let idleMode = false;
+
+  function startIdleGlitch() {
+    if (idleMode) return;
+    idleMode = true;
+    if (idleTimer) clearInterval(idleTimer);
+    idleTimer = setInterval(function () {
+      let out = "";
+      for (let i = 0; i < ORIGINAL.length; i++) {
+        out += Math.random() > 0.4
+          ? POOL.charAt(Math.floor(Math.random() * POOL.length))
+          : ORIGINAL.charAt(i);
+      }
+      h1.textContent = out;
+      h1.setAttribute("data-text", out);
+    }, 110);
+  }
+
+  function stopIdleGlitch() {
+    if (!idleMode) return;
+    idleMode = false;
+    if (idleTimer) {
+      clearInterval(idleTimer);
+      idleTimer = null;
+    }
+    h1.textContent = ORIGINAL;
+    h1.setAttribute("data-text", ORIGINAL);
+  }
+
+  function resetIdle() {
+    lastInteraction = Date.now();
+    stopIdleGlitch();
+  }
+
+  ["pointermove", "pointerdown", "keydown", "touchstart", "wheel", "scroll"].forEach(function (ev) {
+    window.addEventListener(ev, resetIdle, { passive: true });
+  });
+
+  setInterval(function () {
+    if (!idleMode && Date.now() - lastInteraction > IDLE_MS) {
+      startIdleGlitch();
+    }
+  }, 2000);
+
+  /* ================= 5. 底部终端日志 ================= */
+  const LOG_LINES = [
+    "[OK] node-Q1 :: 796636370 :: link established",
+    "[OK] node-Q2 :: 1094574886 :: link established",
+    "[OK] node-Q3 :: 571288937 :: link established",
+    "[WARN] node-Q4 :: STANDBY :: awaiting capacity",
+    "[OK] TrustNTE kernel :: v2.0.1 :: online",
+    "[OK] handshake :: ECDSA verified :: secure",
+    "[OK] uplink :: 12ms :: stable",
+    "[OK] auto-clean :: 0 anomaly :: done",
+    "[OK] anti-cheat :: module armed :: active",
+    "[OK] sync :: yihuan core :: 100%"
+  ];
+
+  const termTrack = document.getElementById("termTrack");
+
+  function buildLogItem(text) {
+    const span = document.createElement("span");
+    const cls = text.indexOf("[WARN]") === 0 ? "warn" : "ok";
+    span.className = "log-item " + cls;
+    span.textContent = text;
+    return span;
+  }
+
+  // 双份内容，实现无缝循环
+  for (let rep = 0; rep < 2; rep++) {
+    LOG_LINES.forEach(function (line) {
+      termTrack.appendChild(buildLogItem(line));
+    });
+  }
+})();
+</script>
+</body>
+</html>

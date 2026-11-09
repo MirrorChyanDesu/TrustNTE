@@ -96,7 +96,7 @@ namespace TrustNTE.Services
             }
         }
 
-        // [修复#15] 跨站请求校验：浏览器里的任意网页不能再打本 API。
+        // [   #15] 跨站请求校验：浏览器里的任意网页不能再打本 API。
         // 本地程序（curl / PowerShell / AI 工具）不带 Origin/Referer → 放行；
         // localhost 页面（viewer.html 同源）→ 放行；其它网站的页面 → 403。
         private static bool IsLocalOrigin(HttpListenerRequest request)
@@ -126,7 +126,7 @@ namespace TrustNTE.Services
 
             try
             {
-                // [修复#15] 入口校验：只放行本地工具与 localhost 页面，跨站网页一律 403。
+                // [   #15] 入口校验：只放行本地工具与 localhost 页面，跨站网页一律 403。
                 // （原 Access-Control-Allow-Origin:* 已删除——它等于允许任意网站读走截图）
                 if (!IsLocalOrigin(request))
                 {

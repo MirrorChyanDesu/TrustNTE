@@ -311,7 +311,7 @@ namespace TrustNTE.Services.Fishing
 
         private async Task DoRecoverFishing(Mat frame, CancellationToken token)
         {
-            // ★ 修复：多尺度匹配气泡 + 粉色检测兜底
+            //    多尺度匹配气泡 + 粉色检测兜底
             bool hudVisible = _templateService.MatchAny(frame, FishingSceneMap.CastRodRect1, FishingSceneMap.TplCastRod) != null ||
                               _templateService.MatchAny(frame, FishingSceneMap.CastRodRect2, FishingSceneMap.TplCastRod) != null ||
                               _templateService.MatchAny(frame, FishingSceneMap.StartRect, FishingSceneMap.TplStartFishing) != null ||

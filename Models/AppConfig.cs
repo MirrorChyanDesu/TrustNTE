@@ -31,6 +31,8 @@ namespace TrustNTE.Models
         [ObservableProperty] private string _triggerInterval = "50";
         [ObservableProperty] private bool _startGameTogether = true;
         [ObservableProperty] private bool _isBackgroundMode = false;
+
+        [ObservableProperty] private bool _isLogEnabled = true;
         [ObservableProperty] private double _maskOpacity = 0.1;
         [ObservableProperty] private double _maskTextOpacity = 1.0;
         [ObservableProperty] private bool _autoClaimRewards = false;

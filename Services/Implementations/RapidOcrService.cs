@@ -35,8 +35,6 @@ namespace TrustNTE.Services.Implementations
                 string baseDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "NTE-Ocr_Models");
                 string detPath = Path.Combine(baseDir, "det.onnx");
                 string recPath = Path.Combine(baseDir, "rec.onnx");
-
-                // 指向你刚下载的新字典
                 string dictPath = Path.Combine(baseDir, "ppocrv6_dict.txt");
 
                 try
@@ -44,47 +42,34 @@ namespace TrustNTE.Services.Implementations
                     _engine?.Dispose();
                     _engine = null;
 
-                    _logService.LogInfo("[OCR初始化] 开始加载模型...");
-
                     if (!File.Exists(detPath) || !File.Exists(recPath))
                     {
                         _logService.LogError("[OCR初始化] 失败: det.onnx 或 rec.onnx 不存在！");
                         return;
                     }
-                    if (!File.Exists(dictPath))
-                    {
-                        _logService.LogError($"[OCR初始化] 失败: 找不到字典文件 {dictPath}，请确认已经放入该目录！");
-                        return;
-                    }
 
-                    _logService.LogInfo("[OCR初始化] 正在初始化底层引擎 (PPOCRV6, 加载外部标准字典)...");
-
-                    // RapidOCRSharp 底层会自动去程序根目录查找 ppocr_keys_v1.txt 作为字典
-                    // 我们先把新下载的 ppocrv6_dict.txt 复制过去
                     string targetDictPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ppocr_keys_v1.txt");
-                    try
+                    if (File.Exists(dictPath))
                     {
                         File.Copy(dictPath, targetDictPath, true);
-                        _logService.LogInfo("[OCR初始化] 已将标准字典 ppocrv6_dict.txt 复制到根目录作为 ppocr_keys_v1.txt 使用。");
                     }
-                    catch (Exception ex)
-                    {
-                        _logService.LogError($"[OCR初始化] 复制字典失败: {ex.Message}");
-                        return;
-                    }
+
+                    _logService.LogInfo("[OCR初始化] 正在启动 DirectML (GPU 加速) 引擎...");
 
                     var ocrConfig = new OcrConfig(
                         detPath,
                         recPath,
                         LangRec.CH,
-                        OCRVersion.PPOCRV6, // 必须使用 V6 版本
-                        null                // clsMobilePath 传 null
+                        OCRVersion.PPOCRV6,
+                        null! // 不需要方向分类模型，省时间
                     );
 
-                    _engine = new RapidOCRSharp(new ExecutionProviderCPU(ocrConfig));
+                    // ★ 核心 1：显式传入 0，调用第一块显卡，消除二义性
+                    var dmlProvider = new ExecutionProviderDirectML(ocrConfig, 0);
+                    _engine = new RapidOCRSharp(dmlProvider);
                     _isEngineReady = true;
 
-                    _logService.LogInfo("[OCR初始化] 模型加载成功！引擎已就绪。");
+                    _logService.LogInfo("[OCR初始化] ✅ GPU 引擎加载成功！");
                 }
                 catch (Exception ex)
                 {
@@ -99,61 +84,45 @@ namespace TrustNTE.Services.Implementations
             EnsureEngineLoaded();
 
             if (image == null || image.Empty() || _engine == null || !_isEngineReady)
-            {
-                _logService.LogWarning("[OCR] 识别失败：图像为空或引擎未就绪。");
                 return string.Empty;
-            }
 
             token.ThrowIfCancellationRequested();
 
-            using var clonedMat = image.Clone();
+            // 通道统一转 BGR
             using var bgrMat = new Mat();
-
-            if (clonedMat.Channels() == 4)
-                Cv2.CvtColor(clonedMat, bgrMat, ColorConversionCodes.BGRA2BGR);
-            else if (clonedMat.Channels() == 1)
-                Cv2.CvtColor(clonedMat, bgrMat, ColorConversionCodes.GRAY2BGR);
+            if (image.Channels() == 4)
+                Cv2.CvtColor(image, bgrMat, ColorConversionCodes.BGRA2BGR);
+            else if (image.Channels() == 1)
+                Cv2.CvtColor(image, bgrMat, ColorConversionCodes.GRAY2BGR);
             else
-                clonedMat.CopyTo(bgrMat);
+                image.CopyTo(bgrMat);
 
-            // 放大 3 倍 + 加边距
+            // ★ 核心 2：解决你的 UID 图片识别不出的问题
+            // 原图高度只有 27，太小了。我们放大 2.5 倍（不要加黑边，让引擎自己处理）
             using var resizedMat = new Mat();
-            Cv2.Resize(bgrMat, resizedMat, new OpenCvSharp.Size(bgrMat.Width * 3, bgrMat.Height * 3), 0, 0, InterpolationFlags.Cubic);
-
-            using var paddedMat = new Mat();
-            Cv2.CopyMakeBorder(resizedMat, paddedMat, 30, 30, 30, 30, BorderTypes.Constant, new Scalar(0, 0, 0));
+            Cv2.Resize(bgrMat, resizedMat, new OpenCvSharp.Size(bgrMat.Width * 2.5, bgrMat.Height * 2.5), 0, 0, InterpolationFlags.Cubic);
 
             return await Task.Run(() =>
             {
-                string tempPath = Path.Combine(Path.GetTempPath(), $"ocr_{Guid.NewGuid():N}.png");
                 try
                 {
-                    Cv2.ImWrite(tempPath, paddedMat);
-
-                    var ocrResult = _engine.RecognizeText(tempPath);
+                    // ★ 核心 3：直接传 Mat 进内存，绝对不写硬盘！
+                    var ocrResult = _engine.RecognizeText(resizedMat);
                     string text = ocrResult?.TextBlocks ?? string.Empty;
 
-                    if (string.IsNullOrWhiteSpace(text))
-                    {
-                        _logService.LogInfo("[OCR] 识别完成，但文本内容为空。");
-                        return string.Empty;
-                    }
+                    if (string.IsNullOrWhiteSpace(text)) return string.Empty;
 
-                    string cleanText = Regex.Replace(text, @"[^\w:]", "");
-                    _logService.LogInfo($"[OCR] 原始结果: '{text}' | 清理后: '{cleanText}'");
+                    // 清理多余字符，只留字母数字中文和冒号
+                    string cleanText = Regex.Replace(text, @"[^\w:\u4e00-\u9fa5]", "");
+
+                    if (string.IsNullOrWhiteSpace(cleanText)) return string.Empty;
+
                     return cleanText;
                 }
                 catch (Exception ex)
                 {
-                    _logService.LogError($"[OCR] 识别过程发生异常: {ex.Message}");
+                    _logService.LogError($"[OCR] 识别发生异常: {ex.Message}");
                     return string.Empty;
-                }
-                finally
-                {
-                    if (File.Exists(tempPath))
-                    {
-                        try { File.Delete(tempPath); } catch { }
-                    }
                 }
             }, token).ConfigureAwait(false);
         }

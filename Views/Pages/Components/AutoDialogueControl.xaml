@@ -28,7 +28,8 @@
                     <ui:TextBlock FontTypography="Body" Text="当识别到传送是否传送" />
                     <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="如果UI中是传送就识别并点击，不是就不识别 " />
                 </StackPanel>
-                <ui:ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding Config.AutoDialogueFastClick}" VerticalAlignment="Center" />
+                <!-- ★ 这里已经修复为正确的单行标签 -->
+                <ui:ToggleSwitch Grid.Column="1" Margin="0,0,36,0" IsChecked="{Binding Config.AutoTeleportEnabled}" VerticalAlignment="Center" />
             </Grid>
             <Separator Margin="-18,0" BorderThickness="0,1,0,0" />
             <Grid Margin="16">

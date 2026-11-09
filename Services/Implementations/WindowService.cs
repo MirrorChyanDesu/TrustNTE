@@ -132,7 +132,7 @@ namespace TrustNTE.Services.Implementations
         public void HideOverlayWindow()
         {
             _overlayWindow?.HideMask();
-            RestoreMainWindowFocus(); // 修复压底
+            RestoreMainWindowFocus(); //    压底
         }
 
         public void UpdateOverlayPosition(int x, int y, int width, int height)
@@ -202,7 +202,7 @@ namespace TrustNTE.Services.Implementations
         {
             _combatDebugWindow?.Close();
             _combatDebugWindow = null;
-            RestoreMainWindowFocus(); // 修复压底
+            RestoreMainWindowFocus(); //    压底
         }
 
         public void ShowMapMatchDebugWindow(MapMatchDebugWindowViewModel viewModel)
@@ -228,7 +228,7 @@ namespace TrustNTE.Services.Implementations
         {
             _mapMatchDebugWindow?.Close();
             _mapMatchDebugWindow = null;
-            RestoreMainWindowFocus(); // 修复压底
+            RestoreMainWindowFocus(); //    压底
         }
 
         public Window? ShowAutoFishingPreviewWindow(AutoFishingPreviewViewModel viewModel)

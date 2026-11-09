@@ -20,7 +20,7 @@
                 HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="16">
             <StackPanel Orientation="Horizontal">
                 <ui:SymbolIcon Symbol="Info24" Foreground="DeepSkyBlue" VerticalAlignment="Center" Margin="0,0,8,0"/>
-                <TextBlock Text="按住画面上的【绿圈】拖动，可实时   改 D F J K 的判定圆心" 
+                <TextBlock Text="按住画面上的【绿圈】拖动，可实时改 D F J K 的判定圆心" 
                            Foreground="White" FontSize="13" VerticalAlignment="Center"/>
             </StackPanel>
         </Border>

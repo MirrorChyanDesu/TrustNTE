@@ -44,9 +44,24 @@ namespace TrustNTE.Models
         private HotKeyTypeEnum _hotKeyType = HotKeyTypeEnum.None;
 
         /// <summary>
-        /// 触发动作
+        /// 是否是按住生效（长按）功能，如：自动飘逸。全局热键无法实现，只能键鼠监听。
+        /// </summary>
+        public bool IsHold { get; set; } = false;
+
+        /// <summary>
+        /// 是否允许使用全局热键（默认允许，长按功能设为 false）
+        /// </summary>
+        public bool AllowGlobal { get; set; } = true;
+
+        /// <summary>
+        /// 触发动作（按下）
         /// </summary>
         public Action<object?, EventArgs>? OnKeyDownAction { get; set; }
+
+        /// <summary>
+        /// ★ 新增：长按功能松开时的动作（仅 IsHold=true 的项使用）
+        /// </summary>
+        public Action? OnKeyReleasedAction { get; set; }
 
         /// <summary>
         /// 类型显示名称
@@ -57,6 +72,22 @@ namespace TrustNTE.Models
             HotKeyTypeEnum.KeyboardMonitor => "键鼠监听",
             _ => "无"
         };
+
+        // ================= ★ 大牛 XAML 需要的计算属性 =================
+
+        /// <summary>
+        /// 长按类功能名显示"（长按生效）"后缀
+        /// </summary>
+        public string DisplayName => IsHold ? $"{FunctionName}（长按生效）" : FunctionName;
+
+        /// <summary>
+        /// 类型按钮的悬浮提示：可切/不可切给不同文案
+        /// </summary>
+        public string TypeToolTip => AllowGlobal
+            ? "点击切换：键鼠监听 ⇄ 全局热键"
+            : "长按生效的功能不支持全局热键（全局热键没有 KeyUp 事件）";
+
+        // ==============================================================
 
         /// <summary>
         /// 构造函数：创建目录节点
@@ -79,6 +110,14 @@ namespace TrustNTE.Models
 
             HotKey = HotKey.Parse(hotkeyStr);
             HotKeyType = Enum.TryParse<HotKeyTypeEnum>(typeStr, out var type) ? type : HotKeyTypeEnum.None;
+        }
+
+        /// <summary>
+        /// ★ 核心补丁：当 HotKeyType 发生变化时，强制通知 UI 刷新 HotKeyTypeName（按钮文字）
+        /// </summary>
+        partial void OnHotKeyTypeChanged(HotKeyTypeEnum value)
+        {
+            OnPropertyChanged(nameof(HotKeyTypeName));
         }
 
         /// <summary>

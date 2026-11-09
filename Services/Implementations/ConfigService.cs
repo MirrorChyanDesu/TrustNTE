@@ -13,7 +13,7 @@ namespace TrustNTE.Services.Implementations
         private readonly string _configPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json");
 
         // ══════════════════════════════════════════════════════════════
-        // [修复·音游漏键] 锁拆分（原版单把 _fileLock 同时罩住 读缓存/写缓存/序列化/文件IO）
+        // [   ·音游漏键] 锁拆分（原版单把 _fileLock 同时罩住 读缓存/写缓存/序列化/文件IO）
         //
         // 病根：IInputRouter.CurrentDrive → Load() 在【每次按键/点击】都会调用；
         //       原版 Save 的后台写盘（序列化+写文件+Move）持同一把锁 →

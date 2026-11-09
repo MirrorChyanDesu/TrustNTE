@@ -32,7 +32,7 @@ namespace TrustNTE.Services
             {
                 var syncedFrame = new Mat();
 
-                // 🚨 核心修复：使用 Cubic（三次插值），极大程度保留放大后的边缘锐度！
+                // 🚨 核心   ：使用 Cubic（三次插值），极大程度保留放大后的边缘锐度！
                 Cv2.Resize(frame, syncedFrame, new OpenCvSharp.Size(NteBaseWidth, NteBaseHeight), 0, 0, InterpolationFlags.Cubic);
 
                 return syncedFrame;

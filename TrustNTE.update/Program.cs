@@ -64,7 +64,7 @@ namespace TrustNTE.Update
 
                 if (string.IsNullOrWhiteSpace(TencentUrl))
                 {
-                    // 👇 修复阻断编译错误：调用公开的 BeginUpdate
+                    //        阻断编译错误：调用公开的 BeginUpdate
                     win.BeginUpdate();
                 }
                 else
@@ -82,7 +82,7 @@ namespace TrustNTE.Update
 
         public static async Task<bool> StartUpdateAsync(UpdateWindow win)
         {
-            // 👇 提前声明 tempRoot，防止 catch 中无法清理
+            //     提前声明 tempRoot，防止 catch 中无法清理
             string tempRoot = Path.Combine(AppContext.BaseDirectory, $"_update_{Guid.NewGuid():N}");
             try
             {
@@ -144,7 +144,7 @@ namespace TrustNTE.Update
             {
                 Log("更新失败：" + ex);
                 win.UpdateStatus($"更新失败：{ex.Message}", isError: true);
-                // 👇 修复垃圾残留：失败时删除临时目录
+                //        垃圾残留：失败时删除临时目录
                 try { if (Directory.Exists(tempRoot)) Directory.Delete(tempRoot, true); } catch { }
                 return false;
             }
@@ -176,7 +176,7 @@ namespace TrustNTE.Update
 
         private static async Task WaitMainExitedAsync(int? pid)
         {
-            // 👇 修复超时丢失：加入 15 秒超时机制
+            //        超时丢失：加入 15 秒超时机制
             using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
             if (pid.HasValue)
             {

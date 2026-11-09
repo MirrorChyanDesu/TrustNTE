@@ -28,6 +28,7 @@
         </Border>
 
         <StackPanel Grid.Row="2" Margin="24,0,24,16">
+            <!-- 1. GitHub 更新 -->
             <ui:CardControl Margin="0,0,0,8">
                 <ui:CardControl.Icon>
                     <ui:ImageIcon Source="pack://application:,,,/Views/Windows/Assets/icon_github.png" Width="32" Height="32" />
@@ -38,24 +39,30 @@
                         <ui:TextBlock Text="开源渠道，国内下载可能较慢" FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <!-- [模块E]    改原因：Click 事件改为 Command 绑定，业务逻辑已迁入 CheckUpdateWindowViewModel -->
-                <ui:Button Content="立即更新" Width="72" Command="{Binding UpdateFromGithubCommand}" />
+                <!-- 把宽度加大到 90，解决文字截断问题 -->
+                <ui:Button Content="立即更新" MinWidth="90" Command="{Binding UpdateFromGithubCommand}" />
             </ui:CardControl>
 
+            <!-- 2. 网盘更新 -->
             <ui:CardControl Margin="0,0,0,8">
                 <ui:CardControl.Icon>
                     <ui:ImageIcon Source="pack://application:,,,/Views/Windows/Assets/icon_baidu.png" Width="32" Height="32" />
                 </ui:CardControl.Icon>
                 <ui:CardControl.Header>
                     <StackPanel>
-                        <ui:TextBlock Text="百度网盘更新" FontTypography="Body" />
-                        <ui:TextBlock Text="国内高速下载，提取码：xxxx" FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" />
+                        <ui:TextBlock Text="网盘加速下载" FontTypography="Body" />
+                        <ui:TextBlock Text="国内高速下载，任选其一" FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <!-- [模块E]    改原因：Click 事件改为 Command 绑定 -->
-                <ui:Button Content="立即更新" Appearance="Success" Command="{Binding OpenBaiduPanCommand}" />
+                <!-- 三个网盘按钮 -->
+                <StackPanel Orientation="Horizontal">
+                    <ui:Button Content="蓝奏云" Appearance="Success" Command="{Binding OpenLanZouCommand}" Margin="0,0,6,0" />
+                    <ui:Button Content="夸克" Appearance="Primary" Command="{Binding OpenQuarkCommand}" Margin="0,0,6,0" />
+                    <ui:Button Content="百度" Appearance="Secondary" Command="{Binding OpenBaiduCommand}" />
+                </StackPanel>
             </ui:CardControl>
 
+            <!-- 3. QQ 群更新 -->
             <ui:CardControl>
                 <ui:CardControl.Icon>
                     <ui:ImageIcon Source="pack://application:,,,/Views/Windows/Assets/icon_qq.png" Width="32" Height="32" />
@@ -66,12 +73,10 @@
                         <ui:TextBlock Text="加入官方群，在群文件下载最新版" FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" />
                     </StackPanel>
                 </ui:CardControl.Header>
-                <!-- [模块E]    改原因：Click 事件改为 Command 绑定 -->
                 <ui:Button Content="加入QQ群" Appearance="Secondary" Command="{Binding JoinQQGroupCommand}" />
             </ui:CardControl>
         </StackPanel>
 
-        <!-- [模块E]    改原因：三个按钮的 Click 事件改为 Command 绑定 -->
         <Grid Grid.Row="3" Margin="24,0,24,24">
             <ui:Button Content="跳过此版本" Appearance="Secondary" HorizontalAlignment="Left" Command="{Binding SkipVersionCommand}" />
 

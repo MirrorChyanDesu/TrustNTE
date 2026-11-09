@@ -74,6 +74,12 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+	<ItemGroup>
+		<!-- 排除更新器文件夹，防止主项目编译时去解析更新器的 XAML -->
+		<Compile Remove="TrustNTE.update\**" />
+		<Page Remove="TrustNTE.update\**" />
+		<None Remove="TrustNTE.update\**" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<None Remove="Assets\Psd\**\*.*" />
@@ -102,7 +108,7 @@
 		<PackageReference Include="Markdig" Version="1.5.1" />
 		<PackageReference Include="MarkdView" Version="1.0.12" />
 		<PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-		<PackageReference Include="Microsoft.ML.OnnxRuntime.Gpu" Version="1.31.0" />
+		<PackageReference Include="Microsoft.ML.OnnxRuntime.DirectML" Version="1.24.4" />
 		<PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4314.35" />
 		<PackageReference Include="MouseKeyHook" Version="5.7.1" />
 		<PackageReference Include="Microsoft.ClearScript.V8" Version="7.5.1.1" />

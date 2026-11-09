@@ -249,7 +249,7 @@ namespace TrustNTE.ViewModels.Pages
         }
 
         [RelayCommand]
-        private void ShowMonthlyCardDocAsync()
+        private void ShowMonthlyCardDoc()
         {
             TrustNTE.Views.Windows.DocViewerWindow.ShowDoc("月卡功能说明", "monthly_card.md");
         }

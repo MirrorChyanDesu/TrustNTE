@@ -31,6 +31,7 @@ namespace TrustNTE.ViewModels.Pages
         private readonly IShellService _shellService;
 
         private AppConfig _config;
+        private bool _isInitializing = true;
 
         [ObservableProperty] private bool _isRunning;
         [ObservableProperty] private string _startButtonText = TranslationService.Instance["启动"];
@@ -90,6 +91,9 @@ namespace TrustNTE.ViewModels.Pages
             MaskOpacity = _config.MaskOpacity;
             MaskTextOpacity = _config.MaskTextOpacity;
 
+            // 恢复日志开关状态
+            IsLogEnabled = _config.IsLogEnabled;
+
             if (string.IsNullOrWhiteSpace(_config.MouseDriveType) || Array.IndexOf(MouseDriveTypes, _config.MouseDriveType) < 0)
             {
                 MouseDriveType = "物理点击";
@@ -107,7 +111,9 @@ namespace TrustNTE.ViewModels.Pages
                 if (!string.IsNullOrWhiteSpace(path))
                 {
                     GamePath = path;
+                    _config.GamePath = path; // 同步 config 对象
                     _logService.Log($"已自动从注册表获取启动器路径: {path}");
+                    SaveCurrentConfig();     // 显式保存一次，防止被防抖锁拦截丢失
                 }
             }
 
@@ -117,9 +123,14 @@ namespace TrustNTE.ViewModels.Pages
             InitializeFpsTimer();
             InitializeApi();
             InitializeOcr();
+            // 调用截图引擎的初始化
+            InitializeCapture();
 
             // 启动后台定时器，每 200 毫秒强制检查并刷新一次日志
             _logFlushTimer = new System.Threading.Timer(_ => FlushLogs(), null, 200, 200);
+            // 初始化完毕，关掉防抖锁
+            _isInitializing = false;
+
         }
 
         private void OnConfigPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -232,15 +243,19 @@ namespace TrustNTE.ViewModels.Pages
             config.MaskTextOpacity = this.MaskTextOpacity;
             config.EnableLocalApi = this.IsApiEnabled;
             config.MouseDriveType = this.MouseDriveType;
+            config.CaptureMode = this.SelectedCaptureMode;
+                        // 把日志开关保存到配置文件
+            config.IsLogEnabled = this.IsLogEnabled;
 
             _configService.Save(config);
         }
 
-        partial void OnGamePathChanged(string value) => SaveCurrentConfig();
-        partial void OnTriggerIntervalChanged(string value) => SaveCurrentConfig();
-        partial void OnStartGameTogetherChanged(bool value) => SaveCurrentConfig();
-        partial void OnIsBackgroundModeChanged(bool value) => SaveCurrentConfig();
-        partial void OnAutoClaimRewardsChanged(bool value) => SaveCurrentConfig();
+        // if (!_isInitializing) 守卫
+        partial void OnGamePathChanged(string value) { if (!_isInitializing) SaveCurrentConfig(); }
+        partial void OnTriggerIntervalChanged(string value) { if (!_isInitializing) SaveCurrentConfig(); }
+        partial void OnStartGameTogetherChanged(bool value) { if (!_isInitializing) SaveCurrentConfig(); }
+        partial void OnIsBackgroundModeChanged(bool value) { if (!_isInitializing) SaveCurrentConfig(); }
+        partial void OnAutoClaimRewardsChanged(bool value) { if (!_isInitializing) SaveCurrentConfig(); }
         partial void OnIsRunningChanged(bool value) => OnPropertyChanged(nameof(PreviewPlaceholderVisibility));
 
         public void Dispose()

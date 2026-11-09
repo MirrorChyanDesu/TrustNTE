@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- 🚨 核心修复：直接用字符串绑定窗口的 Title -->
+        <!-- 🚨 核心   ：直接用字符串绑定窗口的 Title -->
         <ui:TitleBar Grid.Row="0" Title="{Binding Title, RelativeSource={RelativeSource AncestorType=Window}}">
             <ui:TitleBar.Icon>
                 <ui:ImageIcon Source="/Assets/titlelogo.ico" Width="16" Height="16" />

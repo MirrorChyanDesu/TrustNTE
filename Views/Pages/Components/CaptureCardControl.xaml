@@ -3,8 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
              xmlns:helpers="clr-namespace:TrustNTE.Helpers">
-
-    <!-- 🚨 核心修复：删除了写死的 IsExpanded="False"，改为绑定 ViewModel -->
     <ui:CardExpander Margin="0,12,0,12" ContentPadding="0" Icon="{ui:SymbolIcon Play24}" IsExpanded="{Binding IsCaptureExpanderExpanded, Mode=TwoWay}">
         <ui:CardExpander.Header>
             <Grid>
@@ -70,7 +68,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
                     <ui:TextBlock FontTypography="Body" Text="{helpers:Trans '抓帧间隔（毫秒）'}" Foreground="{ui:ThemeResource TextFillColorPrimaryBrush}" />
-                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '默认50即可。支持运行中实时   改，千万别低于10！'}" />
+                    <ui:TextBlock FontTypography="Caption" Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}" Text="{helpers:Trans '默认50即可。支持运行中实时改，千万别低于10！'}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,0,36,0" VerticalAlignment="Center">
                     <ui:HyperlinkButton Content="{helpers:Trans '文档'}" 

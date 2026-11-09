@@ -1,7 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5bef047d-05a3-4923-89d1-295a750fbcb1" name="更改" comment="" />
+    <list default="true" id="5bef047d-05a3-4923-89d1-295a750fbcb1" name="更改" comment="">
+      <change beforePath="$PROJECT_DIR$/../../App.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../App.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../NTE-Ocr_Models/ppocrv6_dict.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../NTE-Ocr_Models/ppocrv6_dict.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Models/AppConfig.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Models/AppConfig.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Models/Hotkey/HotKeySettingModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Models/Hotkey/HotKeySettingModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Models/Update/UpdateCheckResult.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Models/Update/UpdateCheckResult.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Fishing/FishingStateMachine.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Fishing/FishingStateMachine.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Game/CaptureDrone.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Game/CaptureDrone.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Game/ScreenCapturer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Game/ScreenCapturer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Implementations/ConfigService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Implementations/ConfigService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Implementations/HotKeyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Implementations/HotKeyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Implementations/LocalApiService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Implementations/LocalApiService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Implementations/NteRenderContextManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Implementations/NteRenderContextManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Implementations/RapidOcrService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Implementations/RapidOcrService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Implementations/WindowService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Implementations/WindowService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Services/Interfaces/IHotKeyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Services/Interfaces/IHotKeyService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../TrustNTE.Tests/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../TrustNTE.Tests/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../TrustNTE.Tests/TrustNTE.Tests.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../TrustNTE.Tests/TrustNTE.Tests.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../TrustNTE.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/../../TrustNTE.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../TrustNTE.update/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../TrustNTE.update/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../TrustNTE.update/UpdateWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../TrustNTE.update/UpdateWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/HotKeySettingsPageViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/HotKeySettingsPageViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/RealTimePageViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/RealTimePageViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.Api.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.Api.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.Capture.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.Capture.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.KeyTest.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.KeyTest.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.Log.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.Log.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/StartPageViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Pages/TaskModules/AutoCombatViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Pages/TaskModules/AutoCombatViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ViewModels/Windows/CheckUpdateWindowViewModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../ViewModels/Windows/CheckUpdateWindowViewModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Controls/HotKeyTextBox.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Controls/HotKeyTextBox.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Pages/Components/AutoDialogueControl.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Pages/Components/AutoDialogueControl.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Pages/Components/CaptureCardControl.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Pages/Components/CaptureCardControl.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Pages/HotKeySettingsPage.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Pages/HotKeySettingsPage.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Pages/HotKeySettingsPage.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Pages/HotKeySettingsPage.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Windows/AutoMusicDocWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Windows/AutoMusicDocWindow.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Windows/CheckUpdateWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Windows/CheckUpdateWindow.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Windows/CheckUpdateWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Windows/CheckUpdateWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Views/Windows/DocViewerWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Views/Windows/DocViewerWindow.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../setup.iss" beforeDir="false" afterPath="$PROJECT_DIR$/../../setup.iss" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,9 +54,12 @@
       </list>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
   <component name="ProjectId" id="3Le4tqDQRqdJcrr9aUgnQjxV8eS" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -28,6 +71,8 @@
     "Python.ui.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
     "last_opened_file_path": "D:/TrustNTE/Assets/NTE-CombatYOLO"
   }
 }]]></component>

@@ -50,7 +50,7 @@ namespace TrustNTE.ViewModels.Pages.TaskModules
                 return;
             }
 
-            // [架构修复] 统一走引擎侧 YoloModelProvider（单实例、进游戏才加载、失败自动重试），
+            // [架构   ] 统一走引擎侧 YoloModelProvider（单实例、进游戏才加载、失败自动重试），
             // 消除 VM 自建第二份模型（双份内存 + 首启阻塞 + 绕过加载门控）。
             var yolo = _automationService.YoloProvider;
             if (yolo.State == YoloModelProvider.YoloLoadState.Failed)

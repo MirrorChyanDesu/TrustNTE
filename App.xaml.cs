@@ -195,7 +195,8 @@ namespace TrustNTE
                 services.AddSingleton<TrustNTE.Services.AutoRedeemCode.RedemptionTemplateService>();
                 services.AddSingleton<TrustNTE.Services.AutoRedeemCode.IRedemptionService,
                                       TrustNTE.Services.AutoRedeemCode.RedemptionService>();
-
+                // 注册快捷键统筹服务
+                services.AddSingleton<HotkeyCoordinatorService>();
                 ServiceProvider = services.BuildServiceProvider();
 
                 // 装配任务车道互斥
@@ -226,6 +227,9 @@ namespace TrustNTE
                 else
                     ApplicationThemeManager.Apply(ApplicationTheme.Unknown);
 
+                // 强行拉起快捷键统筹服务！启动即生效，无需点开快捷键设置页 启动软件即可使用快捷键
+                ServiceProvider.GetRequiredService<HotkeyCoordinatorService>();
+
                 MainWindow mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
 
@@ -234,7 +238,7 @@ namespace TrustNTE
                     mainWindow.Hide();
                 }
 
-                //     补丁 4：如果是 --start，自动开启截图引擎，并将日志写入文件
+                //     如果是 --start，自动开启截图引擎，并将日志写入文件
                 if (IsAutoStartEngine)
                 {
                     var logService = ServiceProvider.GetRequiredService<ILogService>();

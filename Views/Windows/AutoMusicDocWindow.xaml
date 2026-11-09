@@ -43,7 +43,7 @@
                 </ui:TextBlock>
                 <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">
                     <Run Text="• 按住ms：" FontWeight="Bold"/>
-                    <!-- 👇 注意这里，刚才报错就是因为这里的 < 符号，现在已经转义为 &lt; -->
+                    <!--     注意这里，刚才报错就是因为这里的 < 符号，现在已经转义为 &lt; -->
                     <Run Text="模拟键盘按住的时间。太短（&lt;5ms）有的游戏会判定无效吞键（推荐15~25）。"/>
                 </ui:TextBlock>
                 <ui:TextBlock TextWrapping="Wrap" LineHeight="22" Margin="0,5,0,0">

@@ -99,7 +99,7 @@ namespace TrustNTE.Services.Game
 
             try
             {
-                //        核心修复：加入 CAPTUREBLT 标志 (0x40000000)
+                //        核心   ：加入 CAPTUREBLT 标志 (0x40000000)
                 // 防止无边框全屏被其他窗口遮挡导致截出黑屏
                 if (BitBlt(memDC, 0, 0, w, h, deskDC, pt.X, pt.Y, 0x00CC0020 | 0x40000000))
                     result = ExtractMatFromBitmap(memDC, bmp, w, h, ref handle);

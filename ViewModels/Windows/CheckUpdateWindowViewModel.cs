@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using TrustNTE.Models.Update;
 using TrustNTE.Services;
@@ -9,9 +10,6 @@ using TrustNTE.Services.Interfaces;
 
 namespace TrustNTE.ViewModels
 {
-    /// <summary>
-    /// 更新提示窗口的 ViewModel，承载更新提示展示与用户操作响应。
-    /// </summary>
     public partial class CheckUpdateWindowViewModel : ObservableObject
     {
         private readonly UpdateService _updateService;
@@ -22,40 +20,17 @@ namespace TrustNTE.ViewModels
         private readonly string? _downloadUrl;
         private readonly string? _sha256;
 
-        /// <summary>
-        /// 窗口标题文本。
-        /// </summary>
         [ObservableProperty]
         private string _windowTitle = string.Empty;
 
-        /// <summary>
-        /// 更新说明文本。
-        /// </summary>
         [ObservableProperty]
         private string _releaseNote = string.Empty;
 
-        /// <summary>
-        /// 对话框结果。true 表示更新已启动或用户确认，false 表示取消或关闭。
-        /// </summary>
         public bool? DialogResult { get; private set; }
 
-        /// <summary>
-        /// 当 ViewModel 请求关闭窗口时触发，由 View 订阅并设置 DialogResult。
-        /// </summary>
         public event EventHandler? CloseRequested;
-
-        /// <summary>
-        /// 当 ViewModel 请求退出整个应用时触发，由 View 订阅并调用 Application.Current.Shutdown。
-        /// </summary>
         public event EventHandler? CloseApplicationRequested;
 
-        /// <summary>
-        /// 初始化 <see cref="CheckUpdateWindowViewModel"/> 实例。
-        /// </summary>
-        /// <param name="result">检查更新的结果。</param>
-        /// <param name="updateService">更新服务，用于启动更新器。</param>
-        /// <param name="configService">配置服务，用于记录"不再提示"版本号。</param>
-        /// <param name="dialogService">对话框服务。</param>
         public CheckUpdateWindowViewModel(
             UpdateCheckResult result,
             UpdateService updateService,
@@ -70,14 +45,24 @@ namespace TrustNTE.ViewModels
             _dialogService = dialogService;
 
             WindowTitle = $"TrustNTE ! 发现新版本 {result.RemoteVersion}";
-            ReleaseNote = string.IsNullOrWhiteSpace(result.ReleaseNote)
+
+            string finalReleaseNote = result.ReleaseNote;
+            string localTxtPath = Path.Combine(AppContext.BaseDirectory, "Assets", "TrustNTE.update.txt");
+
+            if (File.Exists(localTxtPath))
+            {
+                try
+                {
+                    finalReleaseNote = File.ReadAllText(localTxtPath);
+                }
+                catch { }
+            }
+
+            ReleaseNote = string.IsNullOrWhiteSpace(finalReleaseNote)
                 ? "更新内容：\n暂无详细说明。"
-                : $"更新内容：\n{result.ReleaseNote}";
+                : $"更新内容：\n{finalReleaseNote}";
         }
 
-        /// <summary>
-        /// 从 Github 渠道更新。
-        /// </summary>
         [RelayCommand]
         private async Task UpdateFromGithubAsync()
         {
@@ -101,27 +86,37 @@ namespace TrustNTE.ViewModels
             }
         }
 
-        /// <summary>
-        /// 打开百度网盘下载提示。
-        /// </summary>
         [RelayCommand]
-        private async Task OpenBaiduPanAsync()
-        {
-            await _dialogService.ShowInfoAsync("提示", "正在打开百度网盘下载页面，提取码：xxxx");
-        }
+        private void OpenLanZou() => Process.Start(new ProcessStartInfo("https://www.ilanzou.com/s/VtD6Tsip") { UseShellExecute = true });
 
-        /// <summary>
-        /// 打开 QQ 群加入链接。
-        /// </summary>
+        [RelayCommand]
+        private void OpenQuark() => Process.Start(new ProcessStartInfo("https://pan.quark.cn/s/efefad6d7475") { UseShellExecute = true });
+
+        [RelayCommand]
+        private void OpenBaidu() => Process.Start(new ProcessStartInfo("https://pan.baidu.com/s/1qGPoVe8ODdm3_Chkh7Iasw?pwd=ibrz") { UseShellExecute = true });
+
         [RelayCommand]
         private void JoinQQGroup()
         {
-            Process.Start(new ProcessStartInfo("https://qm.qq.com/q/796636370") { UseShellExecute = true });
+            try
+            {
+                string htmlPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Assets", "Docs", "Web", "Nte_QQGroup.html");
+
+                if (System.IO.File.Exists(htmlPath))
+                {
+                    Process.Start(new ProcessStartInfo(htmlPath) { UseShellExecute = true });
+                }
+                else
+                {
+                    Process.Start(new ProcessStartInfo("https://qm.qq.com/q/ZiqhFvJio2") { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                _ = _dialogService.ShowInfoAsync("提示", $"无法打开群组页面: {ex.Message}");
+            }
         }
 
-        /// <summary>
-        /// 跳过当前版本，不记录忽略。
-        /// </summary>
         [RelayCommand]
         private void SkipVersion()
         {
@@ -129,9 +124,6 @@ namespace TrustNTE.ViewModels
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        /// <summary>
-        /// 不再提示该版本，写入配置后关闭。
-        /// </summary>
         [RelayCommand]
         private void IgnoreVersion()
         {
@@ -140,9 +132,6 @@ namespace TrustNTE.ViewModels
             CloseRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        /// <summary>
-        /// 取消关闭窗口。
-        /// </summary>
         [RelayCommand]
         private void Cancel()
         {

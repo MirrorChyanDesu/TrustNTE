@@ -13,7 +13,7 @@ namespace TrustNTE.ViewModels.Pages
         [ObservableProperty] private int _testClickX = 666;
         [ObservableProperty] private int _testClickY = 666;
 
-        partial void OnMouseDriveTypeChanged(string value) => SaveCurrentConfig();
+        partial void OnMouseDriveTypeChanged(string value) { if (!_isInitializing) SaveCurrentConfig(); }
 
         private async Task TestKeyAsync(int vkCode, string keyName)
         {

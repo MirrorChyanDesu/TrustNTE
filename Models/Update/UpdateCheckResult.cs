@@ -20,6 +20,7 @@
         /// </summary>
         public string ReleaseNote { get; init; } = string.Empty;
 
+        public string? TencentUrl { get; init; }
         /// <summary>
         /// 更新包下载地址。
         /// </summary>

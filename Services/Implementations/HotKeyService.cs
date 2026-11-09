@@ -6,6 +6,7 @@ using System.Windows.Interop;
 using TrustNTE.Models;
 using TrustNTE.Services.Interfaces;
 using Gma.System.MouseKeyHook;
+using WF = System.Windows.Forms; // ★ 别名，防止和 WPF 冲突
 
 namespace TrustNTE.Services.Implementations
 {
@@ -14,12 +15,14 @@ namespace TrustNTE.Services.Implementations
         private const int WM_HOTKEY = 0x0312;
         private HwndSource? _hwndSource;
 
-        private readonly Dictionary<string, int> _hotkeyIdMap = new(); // string id -> int hotkey id
-        private readonly Dictionary<int, Action> _idActionMap = new(); // int hotkey id -> Action
+        private readonly Dictionary<string, int> _hotkeyIdMap = new();
+        private readonly Dictionary<int, Action> _idActionMap = new();
         private int _currentId = 0;
 
         private IKeyboardMouseEvents? _globalHook;
+
         public event Action<HotKey>? OnKeyPressed;
+        public event Action<HotKey>? OnKeyReleased;
 
         [DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
@@ -38,18 +41,27 @@ namespace TrustNTE.Services.Implementations
             _hwndSource.AddHook(WndProc);
         }
 
+        // ★ 新增：WinForms Keys → WPF ModifierKeys 映射
+        private static ModifierKeys ToWpfModifiers(WF.Keys keys)
+        {
+            var m = ModifierKeys.None;
+            if ((keys & WF.Keys.Control) != 0) m |= ModifierKeys.Control;
+            if ((keys & WF.Keys.Shift) != 0) m |= ModifierKeys.Shift;
+            if ((keys & WF.Keys.Alt) != 0) m |= ModifierKeys.Alt;
+            if ((keys & WF.Keys.LWin) != 0 || (keys & WF.Keys.RWin) != 0) m |= ModifierKeys.Windows;
+            return m;
+        }
+
         public void RegisterHotKey(string id, HotKey hotkey, Action action)
         {
             if (hotkey.IsEmpty) return;
-
-            // 如果这个业务 ID 已经注册过，先注销旧的
             UnregisterHotKey(id);
 
             _currentId++;
             int currentId = _currentId;
 
             uint modifiers = (uint)hotkey.Modifiers;
-            uint vk = (uint)KeyInterop.VirtualKeyFromKey(hotkey.Key); // 原代码是对的
+            uint vk = (uint)KeyInterop.VirtualKeyFromKey(hotkey.Key);
 
             if (RegisterHotKey(_hwndSource!.Handle, currentId, modifiers, vk))
             {
@@ -60,7 +72,6 @@ namespace TrustNTE.Services.Implementations
 
         public void UnregisterHotKey(string id)
         {
-            // [   复] 只注销指定的 id，而不是把所有人杀了
             if (_hotkeyIdMap.TryGetValue(id, out int currentId))
             {
                 UnregisterHotKey(_hwndSource!.Handle, currentId);
@@ -73,10 +84,17 @@ namespace TrustNTE.Services.Implementations
         {
             if (_globalHook != null) return;
             _globalHook = Hook.GlobalEvents();
+
             _globalHook.KeyDown += (s, e) =>
             {
-                var hk = new HotKey { Key = KeyInterop.KeyFromVirtualKey(e.KeyValue), Modifiers = Keyboard.Modifiers };
+                var hk = new HotKey { Key = KeyInterop.KeyFromVirtualKey(e.KeyValue), Modifiers = ToWpfModifiers(e.Modifiers) };
                 if (!hk.IsEmpty) OnKeyPressed?.Invoke(hk);
+            };
+
+            _globalHook.KeyUp += (s, e) =>
+            {
+                var hk = new HotKey { Key = KeyInterop.KeyFromVirtualKey(e.KeyValue), Modifiers = ToWpfModifiers(e.Modifiers) };
+                if (!hk.IsEmpty) OnKeyReleased?.Invoke(hk);
             };
         }
 

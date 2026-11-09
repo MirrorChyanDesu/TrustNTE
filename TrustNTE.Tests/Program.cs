@@ -10,7 +10,7 @@ namespace TrustNTE.Tests
         [STAThread]
         public static void Main(string[] args)
         {
-            //        核心修复：强制控制台使用 UTF-8 编码，解决 Emoji 和状态字符乱码
+            //        核心   ：强制控制台使用 UTF-8 编码，解决 Emoji 和状态字符乱码
             Console.OutputEncoding = Encoding.UTF8;
 
             Console.WriteLine("========================================");

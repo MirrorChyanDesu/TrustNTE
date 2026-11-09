@@ -10,7 +10,7 @@
 		<Platforms>x64</Platforms>
 		<PlatformTarget>x64</PlatformTarget>
 
-		<!-- 🚨 核心修复：强制作为控制台程序运行，并指定入口点 -->
+		<!-- 🚨 核心   ：强制作为控制台程序运行，并指定入口点 -->
 		<OutputType>Exe</OutputType>
 		<StartupObject>TrustNTE.Tests.Program</StartupObject>
 	</PropertyGroup>
