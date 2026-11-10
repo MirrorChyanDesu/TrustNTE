@@ -1,0 +1,46 @@
+name: mirrorchyan_release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag (leave empty for the latest release)
+        default: ''
+        required: false
+        type: string
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  mirrorchyan:
+    if: ${{ github.repository_owner == 'TrustNTE' }}
+    name: ${{ matrix.name }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Installer (win-x64)
+            os: win
+            arch: x64
+            filename: 'TrustNTE.Installer.*.exe'
+          - name: ZIP (win)
+            os: win
+            arch: ''
+            filename: 'TrustNTE_*.zip'
+    steps:
+      - uses: MirrorChyan/uploading-action@v1
+        with:
+          filetype: latest-release
+          filename: ${{ matrix.filename }}
+          mirrorchyan_rid: TrustNTE
+          tag: ${{ inputs.tag || github.event.release.tag_name }}
+          os: ${{ matrix.os }}
+          arch: ${{ matrix.arch }}
+          owner: TrustNTE
+          repo: TrustNTE
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          upload_token: ${{ secrets.MirrorChyanUploadToken }}
